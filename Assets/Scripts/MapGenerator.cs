@@ -1,18 +1,17 @@
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator : GenericSingleton<MapGenerator>
 {
     [SerializeField] private TextAsset jsonFile;
-    [SerializeField] private TileController tileController;
 
-    private void Start()
+    public void Init()
     {
         LoadAndGenerateMap();
     }
 
     private void LoadAndGenerateMap()
     {
-        if (jsonFile == null || tileController == null)
+        if (jsonFile == null || TileController.Instance == null)
         {
             Debug.LogError("JSON dosyası veya TileController eksik!");
             return;
@@ -22,6 +21,6 @@ public class MapGenerator : MonoBehaviour
         MapData mapData = JsonUtility.FromJson<MapData>(jsonFile.text);
 
         // Tile'ları oluştur
-        tileController.GenerateTiles(mapData);
+        TileController.Instance.GenerateTiles(mapData);
     }
 }

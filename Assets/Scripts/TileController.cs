@@ -1,17 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum TileType { Start, Empty, Apple, Pear, Strawberry }
 
-public class TileController : MonoBehaviour
+public class TileController : GenericSingleton<TileController>
 {
     [SerializeField] private GameObject tilePrefab; // Tile için prefab
     [SerializeField] private Transform tilesParent; // Tile'ların bağlanacağı parent transform
-    [SerializeField] private List<GameObject> tiles = new List<GameObject>(); // Tüm Tile'ları saklar
+    [SerializeField] private List<Tile> tileList = new List<Tile>(); // Tüm Tile'ları saklar
 
     public void GenerateTiles(MapData mapData)
     {
-        tiles.Clear();
+        tileList.Clear();
 
         var grid = mapData.grid;
         int rowCount = grid.rowCount;
@@ -28,33 +29,32 @@ public class TileController : MonoBehaviour
             Vector3 position = CalculateTilePosition(i, rowCount, columnCount, startX, startZ, tileSize);
 
             // Tile'ı oluştur
-            GameObject tileObject = Instantiate(tilePrefab, position, Quaternion.identity, tilesParent);
-            Tile tile = tileObject.GetComponent<Tile>();
-            if (tile == null)
+            var tile = Instantiate(tilePrefab, position, Quaternion.identity, tilesParent).GetComponent<Tile>();
+            
+            if (tile != null)
             {
-                tile = tileObject.AddComponent<Tile>();
+                tile.SetType(TileType.Empty); // Varsayılan tür
+                tile.name = $"Tile_{i}";
+                tileList.Add(tile);
             }
-            tile.SetType(TileType.Empty); // Varsayılan tür
-            tile.name = $"Tile_{i}";
-
-            tiles.Add(tileObject);
+            
         }
 
         // JSON'da belirtilen özel türleri uygula
         foreach (var tileInfo in mapData.tiles)
         {
-            if (tileInfo.index >= 0 && tileInfo.index < tiles.Count)
+            if (tileInfo.index >= 0 && tileInfo.index < tileList.Count)
             {
                 if (System.Enum.TryParse(mapData.tileTypes[tileInfo.type], out TileType tileType))
                 {
-                    Tile tile = tiles[tileInfo.index].GetComponent<Tile>();
+                    Tile tile = tileList[tileInfo.index].GetComponent<Tile>();
                     tile.SetType(tileType);
                 }
             }
         }
     }
 
-    private Vector3 CalculateTilePosition(int index, int rowCount, int columnCount, float startX, float startZ, float tileSize)
+    private Vector3 CalculateTilePosition(int index, int columnCount, int rowCount, float startX, float startZ, float tileSize)
     {
         // Sol kenar (aşağıdan yukarıya, sol alt köşeden sol üst köşeye kadar)
         if (index < columnCount) 
@@ -80,4 +80,6 @@ public class TileController : MonoBehaviour
             return new Vector3(startX + (rowCount - 2 - relativeIndex) * tileSize, 0, startZ);
         }
     }
+
+    public List<Tile> GetTiles() => tileList;
 }
