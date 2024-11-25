@@ -1,0 +1,12 @@
+{
+  "tileTypes": ["Empty", "Apple", "Pear", "Strawberry"],
+  "tileMap": [
+    {"index": 2, "type": 1},
+    {"index": 6, "type": 2},
+    {"index": 10, "type": 3},
+    {"index": 14, "type": 1},
+    {"index": 18, "type": 2},
+    {"index": 22, "type": 3},
+    {"index": 26, "type": 1}
+  ]
+}
