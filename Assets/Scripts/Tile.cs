@@ -15,10 +15,11 @@ public class Tile : MonoBehaviour
     {
         _tileRenderer.material.color = type switch
         {
-            TileType.Empty => Color.gray,
+            TileType.Empty => Color.white,
             TileType.Apple => Color.red,
             TileType.Pear => Color.green,
             TileType.Strawberry => Color.magenta,
+            TileType.Start => Color.yellow,
             _ => _tileRenderer.material.color
         };
     }

@@ -1,12 +1,33 @@
 {
   "tileTypes": ["Empty", "Apple", "Pear", "Strawberry"],
-  "tileMap": [
-    {"index": 2, "type": 1},
-    {"index": 6, "type": 2},
-    {"index": 10, "type": 3},
-    {"index": 14, "type": 1},
-    {"index": 18, "type": 2},
-    {"index": 22, "type": 3},
-    {"index": 26, "type": 1}
+  "tiles": [
+    {"index": 0, "type": 0, "position": {"x": -3.5, "y": 0, "z": -3.5}},
+    {"index": 1, "type": 0, "position": {"x": -3.5, "y": 0, "z": -2.5}},
+    {"index": 2, "type": 1, "position": {"x": -3.5, "y": 0,  "z": -1.5}},
+    {"index": 3, "type": 0, "position": {"x": -3.5, "y": 0,  "z": -0.5}},
+    {"index": 4, "type": 0, "position": {"x": -3.5, "y": 0,  "z": 0.5}},
+    {"index": 5, "type": 2, "position": {"x": -3.5, "y": 0,  "z": 1.5}},
+    {"index": 6, "type": 0, "position": {"x": -3.5, "y": 0,  "z": 2.5}},
+    {"index": 7, "type": 3, "position": {"x": -3.5, "y": 0,  "z": 3.5}},
+    {"index": 8, "type": 0, "position": {"x": -2.5, "y": 0,  "z": 3.5}},
+    {"index": 9, "type": 0, "position": {"x": -1.5, "y": 0,  "z": 3.5}},
+    {"index": 10, "type": 1, "position": {"x": -0.5, "y": 0,  "z": 3.5}},
+    {"index": 11, "type": 0, "position": {"x": 0.5, "y": 0,  "z": 3.5}},
+    {"index": 12, "type": 0, "position": {"x": 1.5, "y": 0,  "z": 3.5}},
+    {"index": 13, "type": 2, "position": {"x": 2.5, "y": 0,  "z": 3.5}},
+    {"index": 14, "type": 0, "position": {"x": 3.5, "y": 0,  "z": 3.5}},
+    {"index": 15, "type": 0, "position": {"x": 3.5, "y": 0,  "z": 2.5}},
+    {"index": 16, "type": 0, "position": {"x": 3.5, "y": 0,  "z": 1.5}},
+    {"index": 17, "type": 3, "position": {"x": 3.5, "y": 0,  "z": 0.5}},
+    {"index": 18, "type": 0, "position": {"x": 3.5, "y": 0,  "z": -0.5}},
+    {"index": 19, "type": 0, "position": {"x": 3.5, "y": 0,  "z": -1.5}},
+    {"index": 20, "type": 0, "position": {"x": 3.5, "y": 0,  "z": -2.5}},
+    {"index": 21, "type": 1, "position": {"x": 3.5, "y": 0,  "z": -3.5}},
+    {"index": 22, "type": 0, "position": {"x": -2.5, "y": 0,  "z": -3.5}},
+    {"index": 23, "type": 0, "position": {"x": -1.5, "y": 0,  "z": -3.5}},
+    {"index": 24, "type": 2, "position": {"x": -0.5, "y": 0,  "z": -3.5}},
+    {"index": 25, "type": 0, "position": {"x": 0.5, "y": 0,  "z": -3.5}},
+    {"index": 26, "type": 0, "position": {"x": 1.5, "y": 0,  "z": -3.5}},
+    {"index": 27, "type": 3, "position": {"x": 2.5, "y": 0,  "z": -3.5}}
   ]
 }
