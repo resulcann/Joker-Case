@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    [SerializeField] private TextAsset jsonFile;       // JSON dosyası
-    [SerializeField] private TileController tileController; // TileController referansı
+    [SerializeField] private TextAsset jsonFile;
+    [SerializeField] private TileController tileController;
 
     private void Start()
     {
@@ -18,7 +18,7 @@ public class MapGenerator : MonoBehaviour
             return;
         }
 
-        // JSON'u deserialization yap
+        // JSON'u deserialize et
         MapData mapData = JsonUtility.FromJson<MapData>(jsonFile.text);
 
         // Tile'ları oluştur

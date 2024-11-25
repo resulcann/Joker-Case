@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 [System.Serializable]
-public class Position
+public class GridInfo
 {
-    public float x; // Tile'ın X pozisyonu
-    public float y; // Tile'ın Y pozisyonu
-    public float z; // Tile'ın Z pozisyonu
+    public float startX;    // Başlangıç X pozisyonu
+    public float startZ;    // Başlangıç Z pozisyonu
+    public float tileSize;  // Her bir Tile'ın boyutu
+    public int rowCount;    // Satır sayısı
+    public int columnCount; // Sütun sayısı
 }
 
 [System.Serializable]
@@ -13,12 +16,12 @@ public class TileInfo
 {
     public int index; // Tile'ın sırası
     public int type;  // Tile türü (tileTypes dizininde)
-    public Position position; // Tile'ın pozisyonu
 }
 
 [System.Serializable]
 public class MapData
 {
     public List<string> tileTypes; // Tile türlerinin isimleri
-    public List<TileInfo> tiles;  // Tüm Tile bilgileri
+    public GridInfo grid;          // Grid bilgileri
+    public List<TileInfo> tiles;   // Özel türdeki Tile'ların bilgileri
 }
