@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: playerMat
-  m_Shader: {fileID: 4800000, guid: df4ed5276a8fd594e9c407b18b2dae2f, type: 3}
+  m_Name: TileMat
+  m_Shader: {fileID: 4800000, guid: 67efdcf52b6c8af43b95eb8b8558d748, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - TCP2_RAMPTEXT
   m_InvalidKeywords:
-  - OUTLINES
   - TCP2_RIM
   - TCP2_SPEC
   m_LightmapFlags: 4
@@ -47,10 +47,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 90c9e168cb780b44ebc715913f0fc0d0, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MatCap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -77,16 +73,16 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.4472136
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Offset1: 0
     - _Offset2: 0
-    - _Outline: 2
+    - _Outline: 1
     - _Parallax: 0.02
-    - _RampSmooth: 0.61
+    - _RampSmooth: 0.1
     - _RampThreshold: 0.5
     - _RimMax: 1
     - _RimMin: 0.5
@@ -100,12 +96,12 @@ Material:
     - _ZSmooth: -0.5
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    - _Color: {r: 0.972549, g: 0.454902, b: 0.53371537, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HColor: {r: 0.785, g: 0.785, b: 0.785, a: 1}
-    - _OutlineColor: {r: 0.7924528, g: 0.3829319, b: 0.24296904, a: 1}
-    - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.6}
+    - _OutlineColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _RimColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0.6}
     - _RimDir: {r: 0, g: 0, b: 1, a: 0}
-    - _SColor: {r: 0.19499996, g: 0.19499996, b: 0.19499996, a: 1}
-    - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _SColor: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
+    - _SpecColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
   m_BuildTextureStacks: []

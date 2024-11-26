@@ -514,6 +514,12 @@ MonoBehaviour:
   tilePrefab: {fileID: 2276916749226469982, guid: 2affca21d1b67fb48961b23a7901c542, type: 3}
   tilesParent: {fileID: 200348520}
   tileList: []
+  tileColors:
+  - {r: 1, g: 0.69803923, b: 0.35686275, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.62352943, g: 0.90001804, b: 0.9607843, a: 1}
+  - {r: 0.4666667, g: 0.47180215, b: 0.9607843, a: 1}
+  - {r: 0.972549, g: 0.454902, b: 0.53371537, a: 1}
 --- !u!4 &1435017574
 Transform:
   m_ObjectHideFlags: 0
@@ -578,9 +584,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAnimationController: {fileID: 1682215131}
-  moveSpeed: 5
-  rotationSpeed: 360
-  moveValue: 3
+  moveSpeed: 10
+  rotationSpeed: 720
+  moveValue: 10
 --- !u!143 &1682215130
 CharacterController:
   m_ObjectHideFlags: 0

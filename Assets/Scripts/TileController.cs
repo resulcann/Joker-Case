@@ -6,10 +6,14 @@ public enum TileType { Start, Empty, Apple, Pear, Strawberry }
 
 public class TileController : GenericSingleton<TileController>
 {
+    [Header("REFERENCES")]
     [SerializeField] private GameObject tilePrefab; // Tile için prefab
     [SerializeField] private Transform tilesParent; // Tile'ların bağlanacağı parent transform
     [SerializeField] private List<Tile> tileList = new List<Tile>(); // Tüm Tile'ları saklar
-
+    [Space] [Header("SETTINGS")]
+    [SerializeField, Tooltip("0: Start, 1: Empty, 2: Apple, 3: Pear, 4: Strawberry")] 
+    private Color[] tileColors;
+    
     public void GenerateTiles(MapData mapData)
     {
         tileList.Clear();
@@ -81,5 +85,6 @@ public class TileController : GenericSingleton<TileController>
         }
     }
 
+    public Color GetTileColorByType(TileType tileType) => tileColors[(int)tileType];
     public List<Tile> GetTiles() => tileList;
 }
