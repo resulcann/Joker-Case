@@ -13,24 +13,25 @@ public class TileController : GenericSingleton<TileController>
     [Space] [Header("SETTINGS")]
     [SerializeField, Tooltip("0: Start, 1: Empty, 2: Apple, 3: Pear, 4: Strawberry")] 
     private Color[] tileColors;
-    
+
     public void GenerateTiles(MapData mapData)
     {
         tileList.Clear();
 
         var grid = mapData.grid;
-        int rowCount = grid.rowCount;
-        int columnCount = grid.columnCount;
-        float startX = grid.startX;
-        float startZ = grid.startZ;
+        int gridSize = grid.gridSize;
         float tileSize = grid.tileSize;
 
+        // Dinamik başlangıç pozisyonlarını hesapla
+        float startX = -(gridSize / 2f) * tileSize + (tileSize / 2f);
+        float startZ = -(gridSize / 2f) * tileSize + (tileSize / 2f);
+
         // Toplam Tile sayısını hesapla
-        int totalTiles = rowCount * 2 + columnCount * 2 - 4;
+        int totalTiles = gridSize * 2 + gridSize * 2 - 4;
 
         for (int i = 0; i < totalTiles; i++)
         {
-            Vector3 position = CalculateTilePosition(i, rowCount, columnCount, startX, startZ, tileSize);
+            Vector3 position = CalculateTilePosition(i, gridSize, gridSize, startX, startZ, tileSize);
 
             // Tile'ı oluştur
             var tile = Instantiate(tilePrefab, position, Quaternion.identity, tilesParent).GetComponent<Tile>();
@@ -41,7 +42,6 @@ public class TileController : GenericSingleton<TileController>
                 tile.name = $"Tile_{i}";
                 tileList.Add(tile);
             }
-            
         }
 
         // JSON'da belirtilen özel türleri uygula
@@ -58,7 +58,7 @@ public class TileController : GenericSingleton<TileController>
         }
     }
 
-    private Vector3 CalculateTilePosition(int index, int columnCount, int rowCount, float startX, float startZ, float tileSize)
+    private Vector3 CalculateTilePosition(int index, int rowCount, int columnCount, float startX, float startZ, float tileSize)
     {
         // Sol kenar (aşağıdan yukarıya, sol alt köşeden sol üst köşeye kadar)
         if (index < columnCount) 

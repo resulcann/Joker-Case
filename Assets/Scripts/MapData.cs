@@ -4,11 +4,8 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class GridInfo
 {
-    public float startX;    // Başlangıç X pozisyonu
-    public float startZ;    // Başlangıç Z pozisyonu
     public float tileSize;  // Her bir Tile'ın boyutu
-    public int rowCount;    // Satır sayısı
-    public int columnCount; // Sütun sayısı
+    public int gridSize;    // Satır sayısı
 }
 
 [System.Serializable]

@@ -1,11 +1,8 @@
 {
   "tileTypes": ["Start", "Empty", "Apple", "Pear", "Strawberry"],
   "grid": {
-    "startX": -3.5,
-    "startZ": -3.5,
     "tileSize": 1.0,
-    "rowCount": 8,
-    "columnCount": 8
+    "gridSize": 8
   },
   "tiles": [
     {"index": 0, "type": 0},
