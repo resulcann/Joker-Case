@@ -1,36 +1,36 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private TileType tileType; // Tile'ın türü (özellik)
-    [SerializeField] private Renderer _tileRenderer; // Renk için kullanılan renderer
+    [SerializeField] private Renderer _tileRenderer;
     [SerializeField] private SpriteRenderer _spriteRenderer; // Alt obje üzerindeki SpriteRenderer
     private MaterialPropertyBlock _propertyBlock;
-    
+
     private void Awake()
     {
         _propertyBlock = new MaterialPropertyBlock();
     }
-    public void SetType(TileType newType)
+
+    public void SetType(string type)
     {
-        tileType = newType;
-        UpdateVisual();
+        UpdateVisual(type);
     }
 
-    private void UpdateVisual()
+    private void UpdateVisual(string type)
     {
-        _tileRenderer.GetPropertyBlock(_propertyBlock); // Mevcut blok değerlerini al
-        _propertyBlock.SetColor("_Color", TileController.Instance.GetTileColorByType(tileType)); // Rengi ayarla
-        _tileRenderer.SetPropertyBlock(_propertyBlock); // Güncellenmiş bloğu uygula
+        // Renk ataması
+        var color = TileController.Instance.GetTileColorByType(type);
+        _tileRenderer.GetPropertyBlock(_propertyBlock);
+        _propertyBlock.SetColor("_Color", color);
+        _tileRenderer.SetPropertyBlock(_propertyBlock);
 
-        // Sprite güncelleme
-        string spriteName = tileType switch
+        // Sprite ataması
+        var spriteName = type switch
         {
-            TileType.Start => "StartSprite",
-            TileType.Apple => "AppleSprite",
-            TileType.Pear => "PearSprite",
-            TileType.Strawberry => "StrawberrySprite",
+            "Start" => "StartSprite",
+            "Apple" => "AppleSprite",
+            "Pear" => "PearSprite",
+            "Strawberry" => "StrawberrySprite",
             _ => null // Empty veya bilinmeyen türler için null
         };
 

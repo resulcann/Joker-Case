@@ -3,6 +3,7 @@ using UnityEngine;
 public class MapGenerator : GenericSingleton<MapGenerator>
 {
     [SerializeField] private TextAsset jsonFile;
+    private MapData _mapData;
 
     public void Init()
     {
@@ -18,9 +19,11 @@ public class MapGenerator : GenericSingleton<MapGenerator>
         }
 
         // JSON'u deserialize et
-        MapData mapData = JsonUtility.FromJson<MapData>(jsonFile.text);
+        _mapData = JsonUtility.FromJson<MapData>(jsonFile.text);
 
         // Tile'ları oluştur
-        TileController.Instance.GenerateTiles(mapData);
+        TileController.Instance.GenerateTiles(_mapData);
     }
+    
+    public MapData GetMapData() => _mapData;
 }

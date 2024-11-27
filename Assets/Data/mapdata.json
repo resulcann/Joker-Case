@@ -5,15 +5,15 @@
     "gridSize": 8
   },
   "tiles": [
-    {"index": 0, "type": 0},
-    {"index": 2, "type": 2},
-    {"index": 5, "type": 3},
-    {"index": 7, "type": 4},
-    {"index": 10, "type": 2},
-    {"index": 13, "type": 3},
-    {"index": 17, "type": 4},
-    {"index": 21, "type": 2},
-    {"index": 24, "type": 3},
-    {"index": 26, "type": 4}
+    {"index": 0, "type": "Start"},
+    {"index": 2, "type": "Apple"},
+    {"index": 5, "type": "Pear"},
+    {"index": 7, "type": "Strawberry"},
+    {"index": 10, "type": "Apple"},
+    {"index": 13, "type": "Pear"},
+    {"index": 17, "type": "Strawberry"},
+    {"index": 21, "type": "Apple"},
+    {"index": 24, "type": "Pear"},
+    {"index": 26, "type": "Strawberry"}
   ]
 }

@@ -11,8 +11,8 @@ public class GridInfo
 [System.Serializable]
 public class TileInfo
 {
-    public int index; // Tile'ın sırası
-    public int type;  // Tile türü (tileTypes dizininde)
+    public int index;  // Tile'ın sırası
+    public string type; // Tile türü (örneğin: "Start", "Apple")
 }
 
 [System.Serializable]
