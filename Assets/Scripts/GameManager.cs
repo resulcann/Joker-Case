@@ -6,6 +6,7 @@ public class GameManager : GenericSingleton<GameManager>
     public void Start()
     {
         MapGenerator.Instance.Init();
+        DiceController.Instance.Init();
         Player.Instance.Init();
     }
 }
