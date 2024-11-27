@@ -4,21 +4,21 @@ using System.Collections.Generic;
 public class GridInfo
 {
     public float tileSize;  // Her bir Tile'ın boyutu
-    public int gridSize;    // Satır sayısı
+    public int gridSize;    // Satır,sütun sayısı (NxN)
 }
 
 [System.Serializable]
 public class InnerTileInfo
 {
-    public int index;  // Tile'ın sırası
-    public string type; // Tile türü (örneğin: "Start", "Apple")
+    public int index;  // Inner tile'ın sırası
+    public string type; // Inner tile'ın türü
 }
 
 [System.Serializable]
 public class OuterTileInfo
 {
     public int index; // Outer tile'ın sırası
-    public string type; // Outer tile'ın türü (ör: "Skyscraper", "JapaneseTower")
+    public string type; // Outer tile'ın türü
 }
 
 [System.Serializable]

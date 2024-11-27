@@ -22,12 +22,11 @@ public class Player : GenericSingleton<Player>
     public void Init()
     {
         var tiles = TileController.Instance.GetInnerTiles();
-        // Oyuncuyu başlangıç pozisyonuna yerleştir
         if (tiles != null && tiles.Count > 0)
         {
             var startTile = tiles[0].transform; // 0. Tile
-            transform.position = startTile.position; // Oyuncuyu başlangıç pozisyonuna yerleştir
-            LookAtNextTile(); // Bir sonraki Tile'a dönük ol
+            transform.position = startTile.position; // Oyuncu başlangıç pozisyonuna yerleştiriliyor
+            LookAtNextTile(); // Bir sonraki Tile'a rotasyon döndürülüyor
         }
         
         playerAnimationController.PlayIdleAnimation();

@@ -4,10 +4,10 @@ using UnityEngine;
 public class TileController : GenericSingleton<TileController>
 {
     [Header("REFERENCES")]
-    [SerializeField] private GameObject innerTilePrefab; // InnerTile için prefab
-    [SerializeField] private GameObject outerTilePrefab; // OuterTile için prefab
-    [SerializeField] private Transform innerTilesParent; // InnerTile'ların bağlanacağı parent
-    [SerializeField] private Transform outerTilesParent; // OuterTile'ların bağlanacağı parent
+    [SerializeField] private GameObject innerTilePrefab;
+    [SerializeField] private GameObject outerTilePrefab;
+    [SerializeField] private Transform innerTilesParent;
+    [SerializeField] private Transform outerTilesParent; 
     
     [Space]
     [Header("SETTINGS")]
