@@ -93,10 +93,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4520217807570367364}
-  - component: {fileID: 4734090472071121217}
   - component: {fileID: 3622839787487129969}
+  - component: {fileID: 4734090472071121217}
   m_Layer: 0
-  m_Name: Tile
+  m_Name: InnerTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,21 +118,6 @@ Transform:
   - {fileID: 2264446646729489111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4734090472071121217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2276916749226469982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 863f054a729207d40b62fb6dc81402ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileType: 0
-  _tileRenderer: {fileID: 7537502517651602780}
-  _spriteRenderer: {fileID: 4775765461920474202}
 --- !u!65 &3622839787487129969
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -154,6 +139,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4734090472071121217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2276916749226469982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863f054a729207d40b62fb6dc81402ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tileRenderer: {fileID: 7537502517651602780}
+  _spriteRenderer: {fileID: 4775765461920474202}
 --- !u!1 &6688010430439809600
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +204,7 @@ MeshRenderer:
   m_GameObject: {fileID: 6688010430439809600}
   m_Enabled: 1
   m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1

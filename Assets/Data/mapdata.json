@@ -1,10 +1,13 @@
 {
-  "tileTypes": ["Start", "Empty", "Apple", "Pear", "Strawberry"],
+  "innerTileTypes": ["Start", "Empty", "Apple", "Pear", "Strawberry"],
+  "outerTileTypes": ["Empty", "Skyscraper", "JapaneseTower"],
+  
   "grid": {
     "tileSize": 1.0,
     "gridSize": 8
   },
-  "tiles": [
+  
+  "innerTiles": [
     {"index": 0, "type": "Start"},
     {"index": 2, "type": "Apple"},
     {"index": 5, "type": "Pear"},

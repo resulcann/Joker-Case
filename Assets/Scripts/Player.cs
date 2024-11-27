@@ -21,7 +21,7 @@ public class Player : GenericSingleton<Player>
     /// </summary>
     public void Init()
     {
-        var tiles = TileController.Instance.GetTiles();
+        var tiles = TileController.Instance.GetInnerTiles();
         // Oyuncuyu başlangıç pozisyonuna yerleştir
         if (tiles != null && tiles.Count > 0)
         {
@@ -52,7 +52,7 @@ public class Player : GenericSingleton<Player>
     /// <param name="stepCount">Hareket edilecek adım sayısı</param>
     public void MoveToTileBySteps(int stepCount)
     {
-        var tiles = TileController.Instance.GetTiles();
+        var tiles = TileController.Instance.GetInnerTiles();
 
         if (tiles != null && tiles.Count > 0 && stepCount > 0)
         {
@@ -67,7 +67,7 @@ public class Player : GenericSingleton<Player>
     /// <param name="tiles">Tile listesi</param>
     private IEnumerator MoveThroughSteps(int stepsToMove)
     {
-        var tiles = TileController.Instance.GetTiles();
+        var tiles = TileController.Instance.GetInnerTiles();
         
         while (stepsToMove > 0)
         {
@@ -108,7 +108,7 @@ public class Player : GenericSingleton<Player>
     /// </summary>
     private void LookAtNextTile()
     {
-        var tiles = TileController.Instance.GetTiles();
+        var tiles = TileController.Instance.GetInnerTiles();
 
         if (tiles != null && tiles.Count > 0)
         {

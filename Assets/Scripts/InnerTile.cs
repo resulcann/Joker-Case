@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class InnerTile : MonoBehaviour
 {
     [SerializeField] private Renderer _tileRenderer;
-    [SerializeField] private SpriteRenderer _spriteRenderer; // Alt obje üzerindeki SpriteRenderer
+    [SerializeField] private SpriteRenderer _spriteRenderer;
     private MaterialPropertyBlock _propertyBlock;
 
     private void Awake()
@@ -15,23 +15,23 @@ public class Tile : MonoBehaviour
     {
         UpdateVisual(type);
     }
-
+    
     private void UpdateVisual(string type)
     {
         // Renk ataması
-        var color = TileController.Instance.GetTileColorByType(type);
+        Color color = TileController.Instance.GetTileColorByType(type);
         _tileRenderer.GetPropertyBlock(_propertyBlock);
         _propertyBlock.SetColor("_Color", color);
         _tileRenderer.SetPropertyBlock(_propertyBlock);
 
         // Sprite ataması
-        var spriteName = type switch
+        string spriteName = type switch
         {
             "Start" => "StartSprite",
             "Apple" => "AppleSprite",
             "Pear" => "PearSprite",
             "Strawberry" => "StrawberrySprite",
-            _ => null // Empty veya bilinmeyen türler için null
+            _ => null
         };
 
         _spriteRenderer.sprite = spriteName != null ? Resources.Load<Sprite>($"Sprites/{spriteName}") : null;
