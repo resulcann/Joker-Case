@@ -19,13 +19,14 @@ public class InnerTile : MonoBehaviour
     private void UpdateVisual(string type)
     {
         // Renk ataması
-        Color color = TileController.Instance.GetTileColorByType(type);
+        var color = TileController.Instance.GetTileColorByType(type);
+        
         _tileRenderer.GetPropertyBlock(_propertyBlock);
         _propertyBlock.SetColor("_Color", color);
         _tileRenderer.SetPropertyBlock(_propertyBlock);
 
         // Sprite ataması
-        string spriteName = type switch
+        var spriteName = type switch
         {
             "Start" => "StartSprite",
             "Apple" => "AppleSprite",

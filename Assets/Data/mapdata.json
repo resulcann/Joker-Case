@@ -1,6 +1,6 @@
 {
-  "innerTileTypes": ["Start", "Empty", "Apple", "Pear", "Strawberry"],
-  "outerTileTypes": ["Empty", "Skyscraper", "JapaneseTower"],
+  "innerTileTypes": ["Empty", "Start", "Apple", "Pear", "Strawberry"],
+  "outerTileTypes": ["Empty", "SkyScraper1", "SkyScraper2", "SkyScraper3", "SkyScraper4", "Tree_Sakura", "Tree_Large", "Tree_Medium"],
   
   "grid": {
     "tileSize": 1.0,
@@ -15,8 +15,48 @@
     {"index": 10, "type": "Apple"},
     {"index": 13, "type": "Pear"},
     {"index": 17, "type": "Strawberry"},
-    {"index": 21, "type": "Apple"},
+    {"index": 20, "type": "Apple"},
+    {"index": 23, "type": "Strawberry"},
     {"index": 24, "type": "Pear"},
     {"index": 26, "type": "Strawberry"}
+  ],
+
+  "outerTiles": [
+    {"index": 0, "type": "SkyScraper2"},
+    {"index": 1, "type": "Tree_Large"},
+    {"index": 2, "type": "SkyScraper2"},
+    {"index": 3, "type": "Tree_Medium"},
+    {"index": 4, "type": "Tree_Large"},
+    {"index": 5, "type": "SkyScraper3"},
+    {"index": 6, "type": "Tree_Sakura"},
+    {"index": 7, "type": "SkyScraper4"},
+    {"index": 8, "type": "Tree_Large"},
+    {"index": 9, "type": "Tree_Sakura"},
+    {"index": 10, "type": "SkyScraper1"},
+    {"index": 11, "type": "Tree_Medium"},
+    {"index": 12, "type": "Tree_Large"},
+    {"index": 13, "type": "SkyScraper2"},
+    {"index": 14, "type": "Tree_Large"},
+    {"index": 15, "type": "Tree_Medium"},
+    {"index": 16, "type": "Tree_Large"},
+    {"index": 17, "type": "SkyScraper1"},
+    {"index": 18, "type": "Tree_Sakura"},
+    {"index": 19, "type": "Tree_Sakura"},
+    {"index": 20, "type": "Tree_Sakura"},
+    {"index": 21, "type": "SkyScraper4"},
+    {"index": 22, "type": "Tree_Large"},
+    {"index": 23, "type": "Tree_Medium"},
+    {"index": 24, "type": "SkyScraper3"},
+    {"index": 25, "type": "Tree_Sakura"},
+    {"index": 26, "type": "SkyScraper1"},
+    {"index": 27, "type": "Tree_Sakura"},
+    {"index": 28, "type": "Tree_Large"},
+    {"index": 29, "type": "SkyScraper2"},
+    {"index": 30, "type": "Tree_Large"},
+    {"index": 31, "type": "Tree_Medium"},
+    {"index": 32, "type": "SkyScraper3"},
+    {"index": 33, "type": "Tree_Medium"},
+    {"index": 34, "type": "Tree_Sakura"},
+    {"index": 35, "type": "Tree_Large"}
   ]
 }

@@ -12,16 +12,16 @@ public class MapGenerator : GenericSingleton<MapGenerator>
 
     private void LoadAndGenerateMap()
     {
-        if (jsonFile == null || TileController.Instance == null)
+        if (jsonFile == null || TileController.Instance == null) // json dosyası veya tilecnotroller kontrolü
         {
-            Debug.LogError("JSON dosyası veya TileController eksik!");
+            Debug.LogError("JSON file or TileController is missing!");
             return;
         }
 
-        // JSON'u deserialize et
+        // mapdata json okunuyor.
         _mapData = JsonUtility.FromJson<MapData>(jsonFile.text);
 
-        // Tile'ları oluştur
+        // Tilelar oluşturuluyor.
         TileController.Instance.GenerateTiles(_mapData);
     }
     
