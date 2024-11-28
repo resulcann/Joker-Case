@@ -17,7 +17,7 @@ public class DiceSettingsUI : MonoBehaviour
     public void Init()
     {
         Load();
-        inputField.onValueChanged.AddListener(ValidateInput);
+        inputField.onEndEdit.AddListener(ValidateInput);
     }
 
     public void SetDiceValue(int diceValue)
