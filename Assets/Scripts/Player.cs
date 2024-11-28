@@ -65,11 +65,18 @@ public class Player : GenericSingleton<Player>
     {
         var tiles = TileController.Instance.GetInnerTiles();
         _isMoving = true;
+        
+        // Koşma animasyonu başlat
+        playerAnimationController.PlayRunAnimation();
 
         while (_totalStepsToMove > 0)
         {
             // Bir sonraki Tile'a geç
             _currentTileIndex = (_currentTileIndex + 1) % tiles.Count;
+            
+            // Burada varsa tiledaki kaynak toplanıyor.
+            var currentTile = tiles[_currentTileIndex];
+            CollectTileResources(currentTile);
 
             // Oyuncuyu sıradaki Tile'a hareket ettir
             yield return StartCoroutine(MoveToTile(tiles[_currentTileIndex].transform.position));
@@ -79,6 +86,7 @@ public class Player : GenericSingleton<Player>
         }
 
         _isMoving = false;
+        playerAnimationController.PlayIdleAnimation();
     }
 
     /// <summary>
@@ -114,4 +122,22 @@ public class Player : GenericSingleton<Player>
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
+    
+    /// <summary>
+    /// Oyuncu bir Tile'dan geçtiğinde kaynağı toplar.
+    /// </summary>
+    private void CollectTileResources(InnerTile tile)
+    {
+        if (!string.IsNullOrEmpty(tile.GetTileType()) && tile.GetTileAmount() > 0)
+        {
+            // Inventory'e ekle
+            InventoryManager.Instance.AddFruit(tile.GetTileType(), tile.GetTileAmount());
+
+            // Popup göster
+            var tileSprite = TileController.Instance.GetTileSprite(tile.GetTileType()); // Simgeyi al
+            var popupPosition = tile.transform.position + Vector3.up * 2f; // Tile'ın üstünde bir konum
+            PopupManager.Instance.ShowPopup($"+{tile.GetTileAmount()}", tileSprite, popupPosition);
+        }
+    }
+
 }

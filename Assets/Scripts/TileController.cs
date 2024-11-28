@@ -135,5 +135,16 @@ public class TileController : GenericSingleton<TileController>
     public List<InnerTile> GetInnerTiles() => _innerTiles;
     public float GetOuterGridSize() => MapGenerator.Instance.GetMapData().grid.gridSize + 2; // Outer grid boyutu (dış katman)
     public float GetTileSize() => MapGenerator.Instance.GetMapData().grid.tileSize; // Tile boyutu
+    public Sprite GetTileSprite(string tileType)
+    {
+        return tileType switch
+        {
+            "Apple" => Resources.Load<Sprite>($"Sprites/AppleSprite"),
+            "Pear" => Resources.Load<Sprite>($"Sprites/PearSprite"),
+            "Strawberry" => Resources.Load<Sprite>($"Sprites/StrawberrySprite"),
+            _ => null
+        };
+    }
+
 
 }

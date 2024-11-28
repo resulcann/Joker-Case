@@ -53,4 +53,11 @@ public class InnerTile : MonoBehaviour
         amountText.text = !string.IsNullOrEmpty(_amount) ? _amount : "";
         amountText.gameObject.SetActive(!string.IsNullOrEmpty(_amount));
     }
+    
+    public string GetTileType() => _type;
+    public int GetTileAmount()
+    {
+        return int.TryParse(_amount, out var result) ? result : 0;
+    }
+
 }
