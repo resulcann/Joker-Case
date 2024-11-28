@@ -6,7 +6,7 @@ SpriteAtlas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TileSpriteAtlas
+  m_Name: SpriteAtlas
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -36,6 +36,13 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 3b6a93024538a454ea37f305368c1609, type: 3}
     - {fileID: 2800000, guid: 75e5056cea16d3f478ae102410571118, type: 3}
     - {fileID: 2800000, guid: 7ed6aafefafe8cf4b9e47bbe00f09924, type: 3}
+    - {fileID: 2800000, guid: 3e604b84540e8d841b2a22652fcc0066, type: 3}
+    - {fileID: 2800000, guid: 1fdcab6a4bb18d84f9dbfcdd4cbece92, type: 3}
+    - {fileID: 2800000, guid: e0b8284873fe66648b93288a233015f4, type: 3}
+    - {fileID: 2800000, guid: 39561195f9e187f46b1d44186a2e2d57, type: 3}
+    - {fileID: 2800000, guid: b32d16ae26dc18a41bab2926552668c4, type: 3}
+    - {fileID: 2800000, guid: cc660556b68460449b44f21f6d6f1cd5, type: 3}
+    - {fileID: 2800000, guid: 567a585d78bac0e4d8057dacabc48485, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -44,5 +51,5 @@ SpriteAtlas:
   m_PackedSprites: []
   m_PackedSpriteNamesToIndex: []
   m_RenderDataMap: {}
-  m_Tag: TileSpriteAtlas
+  m_Tag: SpriteAtlas
   m_IsVariant: 0

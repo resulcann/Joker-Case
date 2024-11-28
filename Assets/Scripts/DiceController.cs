@@ -39,9 +39,9 @@ public class DiceController : GenericSingleton<DiceController>
 
     private void RollDices()
     {
-        ShowButtons(false); // Roll ve Dice Settings butonlarını kapat
+        ShowButtons(false);
     
-        var diceValues = DiceSettingsPanel.Instance.GetDiceValues(); // DiceSettingsPanel'deki değerleri al
+        var diceValues = DiceSettingsPanel.Instance.GetDiceValues(); 
         
         foreach (var dv in diceValues)
         {
@@ -49,11 +49,10 @@ public class DiceController : GenericSingleton<DiceController>
         }
         StartDiceRollProcess(diceValues, () =>
         {
-            // Zarlar tamamlandıktan sonra
             var totalValue = diceValues.Sum();
 
-            Player.Instance.AddSteps(totalValue); // Toplam değere göre hareket ettir
-            ShowButtons(true); // Roll ve Dice Settings butonlarını tekrar aç
+            Player.Instance.AddSteps(totalValue);
+            ShowButtons(true);
         });
     }
 

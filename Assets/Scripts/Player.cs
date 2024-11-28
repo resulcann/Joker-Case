@@ -31,7 +31,7 @@ public class Player : GenericSingleton<Player>
         playerAnimationController.PlayIdleAnimation();
     }
 
-    void Update()
+    private void Update()
     {
         // TEST İÇİN KLAVYE İLE HAREKET
         if (Input.GetKeyDown(KeyCode.Space) && !_isMoving)

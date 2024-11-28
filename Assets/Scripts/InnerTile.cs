@@ -42,6 +42,13 @@ public class InnerTile : MonoBehaviour
             _ => null
         };
 
+        if (_type == "Start")
+        {
+            var srTransform = _spriteRenderer.transform;
+            srTransform.localPosition = new Vector3(srTransform.localPosition.x, 0.0101f, 0);
+            srTransform.localScale = Vector3.one * 0.0025f;
+        }
+
         _spriteRenderer.sprite = spriteName != null ? Resources.Load<Sprite>($"Sprites/{spriteName}") : null;
 
         // Amount gösterimi
