@@ -6,19 +6,19 @@
     "tileSize": 1.0,
     "gridSize": 8
   },
-  
+
   "innerTiles": [
     {"index": 0, "type": "Start"},
-    {"index": 2, "type": "Apple"},
-    {"index": 5, "type": "Pear"},
-    {"index": 7, "type": "Strawberry"},
-    {"index": 10, "type": "Apple"},
-    {"index": 13, "type": "Pear"},
-    {"index": 17, "type": "Strawberry"},
-    {"index": 20, "type": "Apple"},
-    {"index": 23, "type": "Strawberry"},
-    {"index": 24, "type": "Pear"},
-    {"index": 26, "type": "Strawberry"}
+    {"index": 2, "type": "Apple", "amount": "3"},
+    {"index": 5, "type": "Pear", "amount": "3"},
+    {"index": 7, "type": "Strawberry", "amount": "2"},
+    {"index": 10, "type": "Apple", "amount": "6"},
+    {"index": 13, "type": "Pear", "amount": "5"},
+    {"index": 17, "type": "Strawberry", "amount": "3"},
+    {"index": 20, "type": "Apple", "amount": "5"},
+    {"index": 23, "type": "Strawberry", "amount": "5"},
+    {"index": 24, "type": "Pear", "amount": "8"},
+    {"index": 26, "type": "Strawberry", "amount": "8"}
   ],
 
   "outerTiles": [

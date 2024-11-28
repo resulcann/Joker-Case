@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : GenericSingleton<Player>
@@ -14,7 +13,7 @@ public class Player : GenericSingleton<Player>
     
     private int _currentTileIndex = 0; // Oyuncunun bulunduğu Tile indeksi
     private bool _isMoving = false; // Hareket halinde olup olmadığını kontrol eder
-    public int moveValue = 3;
+    private int _totalStepsToMove = 0; // Karakterin toplam hareket edeceği adım sayısı
 
     /// <summary>
     /// Oyuncuyu başlatır ve başlangıç pozisyonuna yerleştirir.
@@ -34,41 +33,40 @@ public class Player : GenericSingleton<Player>
 
     void Update()
     {
+        // TEST İÇİN KLAVYE İLE HAREKET
         if (Input.GetKeyDown(KeyCode.Space) && !_isMoving)
         {
-            MoveToTileBySteps(1); // Space tuşuna basıldığında bir sonraki Tile'a hareket et
+            AddSteps(1); // Space tuşuna basıldığında toplam adımlara +1 ekle
         }
         if (Input.GetKeyDown(KeyCode.S) && !_isMoving)
         {
-            MoveToTileBySteps(moveValue); // S tuşuna basıldığında moveValue kadar hareket et
+            AddSteps(3); // S tuşuna basıldığında toplam adımlara +3 ekle
         }
     }
 
     /// <summary>
-    /// Oyuncuyu belirtilen adım sayısı kadar hareket ettirir. 
-    /// Tur atma mantığını da içerir.
+    /// Hareket etmek için toplam adım sayısına ekleme yapar.
     /// </summary>
-    /// <param name="stepCount">Hareket edilecek adım sayısı</param>
-    public void MoveToTileBySteps(int stepCount)
+    /// <param name="stepsToAdd">Eklenmek istenen adım sayısı</param>
+    public void AddSteps(int stepsToAdd)
     {
-        var tiles = TileController.Instance.GetInnerTiles();
+        _totalStepsToMove += stepsToAdd;
 
-        if (tiles != null && tiles.Count > 0 && stepCount > 0)
+        if (!_isMoving) // Karakter hareket etmiyorsa hemen harekete geç
         {
-            StartCoroutine(MoveThroughSteps(stepCount));
+            StartCoroutine(MoveThroughSteps());
         }
     }
 
     /// <summary>
-    /// Oyuncuyu mevcut konumundan belirtilen adım sayısı kadar hareket ettirir.
+    /// Oyuncunun hareket etmesi için gerekli coroutine.
     /// </summary>
-    /// <param name="stepsToMove">Hareket edilecek toplam adım sayısı</param>
-    /// <param name="tiles">Tile listesi</param>
-    private IEnumerator MoveThroughSteps(int stepsToMove)
+    private IEnumerator MoveThroughSteps()
     {
         var tiles = TileController.Instance.GetInnerTiles();
-        
-        while (stepsToMove > 0)
+        _isMoving = true;
+
+        while (_totalStepsToMove > 0)
         {
             // Bir sonraki Tile'a geç
             _currentTileIndex = (_currentTileIndex + 1) % tiles.Count;
@@ -76,9 +74,11 @@ public class Player : GenericSingleton<Player>
             // Oyuncuyu sıradaki Tile'a hareket ettir
             yield return StartCoroutine(MoveToTile(tiles[_currentTileIndex].transform.position));
 
-            // Gidilecek adım sayısını azalt
-            stepsToMove--;
+            // Gidilecek toplam adım sayısını azalt
+            _totalStepsToMove--;
         }
+
+        _isMoving = false;
     }
 
     /// <summary>
@@ -88,8 +88,6 @@ public class Player : GenericSingleton<Player>
     /// <returns></returns>
     private IEnumerator MoveToTile(Vector3 targetPosition)
     {
-        _isMoving = true;
-
         // Hedef pozisyona kadar hareket et
         while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
         {
@@ -97,9 +95,8 @@ public class Player : GenericSingleton<Player>
             yield return null;
         }
 
-        transform.position = targetPosition; // Kesin pozisyona yerleştir
+        transform.position = targetPosition; // Kesin pozisyonu ayarla
         LookAtNextTile(); // Bir sonraki Tile'a dönük ol
-        _isMoving = false;
     }
 
     /// <summary>
@@ -111,9 +108,9 @@ public class Player : GenericSingleton<Player>
 
         if (tiles != null && tiles.Count > 0)
         {
-            int nextIndex = (_currentTileIndex + 1) % tiles.Count; // Bir sonraki Tile'ın indeksi
-            Vector3 direction = (tiles[nextIndex].transform.position - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            var nextIndex = (_currentTileIndex + 1) % tiles.Count; // Bir sonraki Tile'ın indeksi
+            var direction = (tiles[nextIndex].transform.position - transform.position).normalized;
+            var targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }

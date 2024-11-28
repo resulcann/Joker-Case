@@ -12,6 +12,7 @@ public class InnerTileInfo
 {
     public int index;  // Inner tile'ın sırası
     public string type; // Inner tile'ın türü
+    public string amount; // Tile'daki miktar
 }
 
 [System.Serializable]

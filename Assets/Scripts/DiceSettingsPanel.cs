@@ -12,10 +12,11 @@ public class DiceSettingsPanel : GenericSingleton<DiceSettingsPanel>
     [Space]
     [SerializeField] private List<DiceSettingsUI> diceSettingsList = new();
     
-    public void Init()
+    public void Init(int diceAmount)
     {
         diceSettingsList.ForEach(ds => ds.Init());
         CloseDiceSettingsPanel();
+        UpdateDiceSettingsVisual(diceAmount);
         
         closePanelBtn.onClick.AddListener(CloseDiceSettingsPanel);
         randomBtn.onClick.AddListener(OnRandomBtn_Clicked);
@@ -63,4 +64,18 @@ public class DiceSettingsPanel : GenericSingleton<DiceSettingsPanel>
         }
         return diceSprites[diceValue];
     }
+    
+    public List<int> GetDiceValues()
+    {
+        var diceValues = new List<int>();
+        foreach (var ds in diceSettingsList)
+        {
+            if (ds.gameObject.activeSelf)
+            {
+                diceValues.Add(ds.GetCurrentDiceValue());
+            }
+        }
+        return diceValues;
+    }
+
 }

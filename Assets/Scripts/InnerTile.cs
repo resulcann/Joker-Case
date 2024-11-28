@@ -1,32 +1,39 @@
+using TMPro;
 using UnityEngine;
 
 public class InnerTile : MonoBehaviour
 {
     [SerializeField] private Renderer _tileRenderer;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private TextMeshPro amountText;
+    
     private MaterialPropertyBlock _propertyBlock;
+    private string _amount = "";
+    private string _type;
 
     private void Awake()
     {
         _propertyBlock = new MaterialPropertyBlock();
     }
 
-    public void SetType(string type)
+    public void SetType(string type, string amount = "")
     {
-        UpdateVisual(type);
+        _type = type;
+        _amount = amount;
+
+        UpdateVisual();
     }
     
-    private void UpdateVisual(string type)
+    private void UpdateVisual()
     {
-        // Renk ataması
-        var color = TileController.Instance.GetTileColorByType(type);
-        
+        var color = TileController.Instance.GetTileColorByType(_type);
+
         _tileRenderer.GetPropertyBlock(_propertyBlock);
         _propertyBlock.SetColor("_Color", color);
         _tileRenderer.SetPropertyBlock(_propertyBlock);
 
         // Sprite ataması
-        var spriteName = type switch
+        var spriteName = _type switch
         {
             "Start" => "StartSprite",
             "Apple" => "AppleSprite",
@@ -36,5 +43,14 @@ public class InnerTile : MonoBehaviour
         };
 
         _spriteRenderer.sprite = spriteName != null ? Resources.Load<Sprite>($"Sprites/{spriteName}") : null;
+
+        // Amount gösterimi
+        UpdateAmountText();
+    }
+
+    private void UpdateAmountText()
+    {
+        amountText.text = !string.IsNullOrEmpty(_amount) ? _amount : "";
+        amountText.gameObject.SetActive(!string.IsNullOrEmpty(_amount));
     }
 }

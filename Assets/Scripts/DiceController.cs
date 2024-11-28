@@ -1,21 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DiceController : GenericSingleton<DiceController>
 {
+    [Header("References")]
     [SerializeField] private TMP_Dropdown diceDropdown; // Dropdown menü
     [SerializeField] private Button rollButton;
     [SerializeField] private Button diceSettingsBtn;
     [SerializeField] private Transform diceSettingsParent;
-
-    private string _dropDownValuePrefName = "DiceDropdownValue";
+    [Space]
+    [SerializeField] private Dice dicePrefab; // Zar prefab
+    [SerializeField] private Transform diceSpawnPoint; // Zarların spawnlanacağı nokta
+    [SerializeField] private Transform diceContainer; // Zarların tutulacağı parent
+    [Space]
+    [SerializeField] private float gapBetweenDices = 0.5f;
+    [SerializeField] private float gapBetweenRows = 1f;
+    [SerializeField] private int maxDicePerRow;
+    [SerializeField] private float timeThresholdBetweenDices = 0;
     
+    private readonly List<Dice> _currentDice = new();
+    private const string DropDownValuePrefName = "DiceDropdownValue";
+
     public void Init()
     {
-        DiceSettingsPanel.Instance.Init();
         Load();
         ShowButtons(true);
+        DiceSettingsPanel.Instance.Init(GetDiceAmount());
         
         rollButton.onClick.AddListener(OnRollButton_Clicked);
         diceSettingsBtn.onClick.AddListener(OnDiceSettingsButton_Clicked);
@@ -25,7 +39,83 @@ public class DiceController : GenericSingleton<DiceController>
 
     private void RollDices()
     {
-        // diceların atılma animasyonu vs burada yapılcak
+        ShowButtons(false); // Roll ve Dice Settings butonlarını kapat
+    
+        var diceValues = DiceSettingsPanel.Instance.GetDiceValues(); // DiceSettingsPanel'deki değerleri al
+        
+        foreach (var dv in diceValues)
+        {
+            Debug.Log(dv);
+        }
+        StartDiceRollProcess(diceValues, () =>
+        {
+            // Zarlar tamamlandıktan sonra
+            var totalValue = diceValues.Sum();
+
+            Player.Instance.AddSteps(totalValue); // Toplam değere göre hareket ettir
+            ShowButtons(true); // Roll ve Dice Settings butonlarını tekrar aç
+        });
+    }
+
+    private void StartDiceRollProcess(List<int> diceValues, System.Action onComplete)
+    {
+        StartCoroutine(RollDicesCoroutine(diceValues, onComplete));
+    }
+
+    private IEnumerator RollDicesCoroutine(List<int> diceValues, System.Action onComplete)
+    {
+        ClearDice();
+        
+        var totalRows = Mathf.CeilToInt((float)diceValues.Count / maxDicePerRow); // Toplam satır sayısı
+
+        for (var i = 0; i < diceValues.Count; i++)
+        {
+            var currentRow = i / maxDicePerRow; // Şu anki satır
+            var indexInRow = i % maxDicePerRow; // Satırdaki indeks
+        
+            // X ekseninde pozisyon (satırdaki zarları ortalamak için hesaplanır)
+            var startX = -(Mathf.Min(diceValues.Count - (currentRow * maxDicePerRow), maxDicePerRow) - 1) * gapBetweenDices / 2f;
+            var xPosition = startX + indexInRow * gapBetweenDices;
+
+            // Z ekseninde pozisyon
+            var zPosition = (totalRows > 1) ? (gapBetweenRows / 2f * (totalRows - 1)) - currentRow * gapBetweenRows : 0f;
+
+            // Zar spawn pozisyonu
+            var spawnPosition = new Vector3(xPosition, diceSpawnPoint.position.y, zPosition);
+
+            // Zar oluşturuluyor
+            var dice = Instantiate(dicePrefab, spawnPosition, Quaternion.identity, diceContainer);
+            dice.SetTargetValue(diceValues[i]);
+            dice.Roll(spawnPosition); // Zar animasyonuna başla
+
+            _currentDice.Add(dice);
+
+            yield return new WaitForSeconds(timeThresholdBetweenDices); // Zarlar arası gecikme
+        }
+
+        // Tüm zarların durmasını bekle
+        yield return new WaitUntil(AllDiceStopped);
+
+        onComplete?.Invoke(); // İşlem tamamlandı
+    }
+    
+    private bool AllDiceStopped()
+    {
+        foreach (var dice in _currentDice)
+        {
+            if (!dice.HasStopped()) return false;
+        }
+        return true;
+    }
+
+
+    private void ClearDice()
+    {
+        foreach (var dice in _currentDice)
+        {
+            Destroy(dice.gameObject);
+        }
+        _currentDice.Clear();
     }
 
     private void OnRollButton_Clicked()
@@ -54,13 +144,13 @@ public class DiceController : GenericSingleton<DiceController>
 
     public void Save()
     {
-        PlayerPrefs.SetInt(_dropDownValuePrefName, diceDropdown.value);
+        PlayerPrefs.SetInt(DropDownValuePrefName, diceDropdown.value);
         PlayerPrefs.Save();
     }
 
     public void Load()
     {
-        diceDropdown.value = PlayerPrefs.GetInt(_dropDownValuePrefName, 2);
+        diceDropdown.value = PlayerPrefs.GetInt(DropDownValuePrefName, 2);
         diceDropdown.onValueChanged?.Invoke(diceDropdown.value);
     }
 }

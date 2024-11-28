@@ -54,7 +54,7 @@ public class TileController : GenericSingleton<TileController>
         {
             if (tileInfo.index >= 0 && tileInfo.index < _innerTiles.Count)
             {
-                _innerTiles[tileInfo.index].SetType(tileInfo.type);
+                _innerTiles[tileInfo.index].SetType(tileInfo.type, tileInfo.amount);
             }
         }
     }
