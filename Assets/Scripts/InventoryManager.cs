@@ -53,7 +53,7 @@ public class InventoryManager : GenericSingleton<InventoryManager>
             if (fruitUI.type == fruitType)
             {
                 var value = _fruitInventory[fruitType];
-                fruitUI.amount.text = FormatNumber(value);
+                fruitUI.amount.text = GameManager.Instance.FormatNumber(value);
                 return;
             }
         }
@@ -96,21 +96,5 @@ public class InventoryManager : GenericSingleton<InventoryManager>
             var savedValue = PlayerPrefs.GetInt(fruitUI.prefKey, 0);
             _fruitInventory[fruitUI.type] = savedValue;
         }
-    }
-
-    /// <summary>
-    /// Sayı biçimlendirme ("1.23K", "1.5M" gibi)
-    /// </summary>
-    private string FormatNumber(int value)
-    {
-        if (value >= Mathf.Pow(10,6))
-        {
-            return (value / Mathf.Pow(10,6)).ToString("F2") + "M";
-        }
-        else if (value >= Mathf.Pow(10,3))
-        {
-            return (value / Mathf.Pow(10,3)).ToString("F2") + "K";
-        }
-        return value.ToString();
     }
 }

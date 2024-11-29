@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Player : GenericSingleton<Player>
 {
     [Header("REFERENCES")]
     [SerializeField] private PlayerAnimationController playerAnimationController;
+    [SerializeField] private TextMeshProUGUI stepCountText;
     [Space]
     [Header("MOVE SETTINGS")]
     [SerializeField] private float moveSpeed = 5f; // hareket hızı
@@ -26,6 +28,7 @@ public class Player : GenericSingleton<Player>
         }
         
         playerAnimationController.PlayIdleAnimation();
+        UpdateStepText();
     }
     
     
@@ -52,6 +55,7 @@ public class Player : GenericSingleton<Player>
     public void AddSteps(int stepsToAdd)
     {
         _totalStepsToMove += stepsToAdd;
+        UpdateStepText();
 
         if (!_isMoving)
         {
@@ -81,6 +85,7 @@ public class Player : GenericSingleton<Player>
 
             // Gidilecek toplam adım sayısı azaltılıyor.
             _totalStepsToMove--;
+            UpdateStepText();
         }
 
         _isMoving = false;
@@ -135,6 +140,11 @@ public class Player : GenericSingleton<Player>
             var popupPosition = tile.transform.position + Vector3.up * 2f;
             PopupManager.Instance.ShowPopup($"+{tile.GetTileAmount()}", tileSprite, popupPosition);
         }
+    }
+
+    private void UpdateStepText()
+    {
+        stepCountText.text = GameManager.Instance.FormatNumber(_totalStepsToMove);
     }
 
 }
