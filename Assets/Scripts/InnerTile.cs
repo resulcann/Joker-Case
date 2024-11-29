@@ -50,8 +50,6 @@ public class InnerTile : MonoBehaviour
         }
 
         _spriteRenderer.sprite = spriteName != null ? Resources.Load<Sprite>($"Sprites/{spriteName}") : null;
-
-        // Amount gösterimi
         UpdateAmountText();
     }
 

@@ -4,12 +4,12 @@ using UnityEngine;
 public class Dice : MonoBehaviour
 {
     [Header("Dice Roll Settings")]
-    [SerializeField] private float fallHeight = 5f; // Zarların başlangıç yüksekliği
-    [SerializeField] private float fallDuration = 1.5f; // Zarların düşme süresi
-    [SerializeField] private float spinSpeed = 720f; // Zarların düşerken dönüş hızı
+    [SerializeField] private float fallHeight = 5f; // zarların başlangıç yüksekliği
+    [SerializeField] private float fallDuration = 1.5f; // zarların düşme süresi
+    [SerializeField] private float spinSpeed = 720f; // zarların düşerken dönüş hızı
 
-    private int _targetValue; // Zarın hedef değeri
-    private bool _hasStopped;
+    private int _targetValue; // zarın hedef değeri
+    private bool _hasStopped; // zar durdu mu?
 
     private readonly Quaternion[] _faceRotations = new Quaternion[]
     {
@@ -47,19 +47,16 @@ public class Dice : MonoBehaviour
         while (elapsedTime < fallDuration)
         {
             var t = elapsedTime / fallDuration;
+            transform.position = Vector3.Lerp(startPosition, endPosition, t); // yer çekimi ile beraber yere düşüş simüle ediliyor
             
-            // Yükseklik interpolasyonu
-            transform.position = Vector3.Lerp(startPosition, endPosition, t); // yer çekimi ile beraber yere düşüş simüle ediliyo
-            
-            // Rastgele dönüş veriliyor zar dönme efekti
+            // Rastgele dönüş zar dönme efekti
             transform.Rotate(Vector3.right, spinSpeed * Time.deltaTime, Space.World);
             transform.Rotate(Vector3.up, spinSpeed * Time.deltaTime, Space.Self);
             
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        // Hedef rotasyona smooth geçiş
+        
         transform.position = endPosition; // Nihai pozisyon
         Quaternion targetRotation = _faceRotations[_targetValue - 1];
         elapsedTime = 0f;
@@ -72,7 +69,7 @@ public class Dice : MonoBehaviour
         }
 
         transform.rotation = targetRotation;
-        _hasStopped = true; // Zar durdu
+        _hasStopped = true;
     }
 
     public bool HasStopped()

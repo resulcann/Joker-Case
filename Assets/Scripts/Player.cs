@@ -8,29 +8,28 @@ public class Player : GenericSingleton<Player>
     [SerializeField] private PlayerAnimationController playerAnimationController;
     [Space]
     [Header("MOVE SETTINGS")]
-    [SerializeField] private float moveSpeed = 5f; // Hareket hızı
-    [SerializeField] private float rotationSpeed = 5f; // Dönüş hızı
+    [SerializeField] private float moveSpeed = 5f; // hareket hızı
+    [SerializeField] private float rotationSpeed = 5f; // dönüş hızı
     
-    private int _currentTileIndex = 0; // Oyuncunun bulunduğu Tile indeksi
-    private bool _isMoving = false; // Hareket halinde olup olmadığını kontrol eder
-    private int _totalStepsToMove = 0; // Karakterin toplam hareket edeceği adım sayısı
-
-    /// <summary>
-    /// Oyuncuyu başlatır ve başlangıç pozisyonuna yerleştirir.
-    /// </summary>
+    private int _currentTileIndex = 0; // oyuncunun bulunduğu Tile indeksi
+    private bool _isMoving = false; // Hareket ediyor mu
+    private int _totalStepsToMove = 0; // Oyuncunun totalde edeceği hareket sayısı
+    
     public void Init()
     {
         var tiles = TileController.Instance.GetInnerTiles();
         if (tiles != null && tiles.Count > 0)
         {
             var startTile = tiles[0].transform; // 0. Tile
-            transform.position = startTile.position; // Oyuncu başlangıç pozisyonuna yerleştiriliyor
-            LookAtNextTile(); // Bir sonraki Tile'a rotasyon döndürülüyor
+            transform.position = startTile.position; // Oyuncu başlangıç pozisyonuna yerleştiriliyor (0. indekse)
+            LookAtNextTile(); // Oyuncunun yönü bir sonraki tile'a bakacak şekilde ayarlanıyor.
         }
         
         playerAnimationController.PlayIdleAnimation();
     }
-
+    
+    
+#if UNITY_EDITOR
     private void Update()
     {
         // TEST İÇİN KLAVYE İLE HAREKET
@@ -43,45 +42,44 @@ public class Player : GenericSingleton<Player>
             AddSteps(3); // S tuşuna basıldığında toplam adımlara +3 ekle
         }
     }
-
+#endif
+    
+    
     /// <summary>
-    /// Hareket etmek için toplam adım sayısına ekleme yapar.
+    /// Hareket edilecek total adım sayısına ekleme yapar.
     /// </summary>
     /// <param name="stepsToAdd">Eklenmek istenen adım sayısı</param>
     public void AddSteps(int stepsToAdd)
     {
         _totalStepsToMove += stepsToAdd;
 
-        if (!_isMoving) // Karakter hareket etmiyorsa hemen harekete geç
+        if (!_isMoving)
         {
             StartCoroutine(MoveThroughSteps());
         }
     }
-
-    /// <summary>
-    /// Oyuncunun hareket etmesi için gerekli coroutine.
-    /// </summary>
+    
     private IEnumerator MoveThroughSteps()
     {
         var tiles = TileController.Instance.GetInnerTiles();
         _isMoving = true;
         
-        // Koşma animasyonu başlat
+        // Koşma animasyonu
         playerAnimationController.PlayRunAnimation();
 
         while (_totalStepsToMove > 0)
         {
-            // Bir sonraki Tile'a geç
+            // index bir sonraki tile'a ayarlanıyor
             _currentTileIndex = (_currentTileIndex + 1) % tiles.Count;
             
             // Burada varsa tiledaki kaynak toplanıyor.
             var currentTile = tiles[_currentTileIndex];
             CollectTileResources(currentTile);
 
-            // Oyuncuyu sıradaki Tile'a hareket ettir
+            // Oyuncuyu sıradaki Tile'a hareket ediyor
             yield return StartCoroutine(MoveToTile(tiles[_currentTileIndex].transform.position));
 
-            // Gidilecek toplam adım sayısını azalt
+            // Gidilecek toplam adım sayısı azaltılıyor.
             _totalStepsToMove--;
         }
 
@@ -96,15 +94,14 @@ public class Player : GenericSingleton<Player>
     /// <returns></returns>
     private IEnumerator MoveToTile(Vector3 targetPosition)
     {
-        // Hedef pozisyona kadar hareket et
         while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             yield return null;
         }
 
-        transform.position = targetPosition; // Kesin pozisyonu ayarla
-        LookAtNextTile(); // Bir sonraki Tile'a dönük ol
+        transform.position = targetPosition; // Kesin pozisyon
+        LookAtNextTile(); // Bir sonraki tile'a dön
     }
 
     /// <summary>
@@ -134,8 +131,8 @@ public class Player : GenericSingleton<Player>
             InventoryManager.Instance.AddFruit(tile.GetTileType(), tile.GetTileAmount());
 
             // Popup göster
-            var tileSprite = TileController.Instance.GetTileSprite(tile.GetTileType()); // Simgeyi al
-            var popupPosition = tile.transform.position + Vector3.up * 2f; // Tile'ın üstünde bir konum
+            var tileSprite = TileController.Instance.GetTileSprite(tile.GetTileType());
+            var popupPosition = tile.transform.position + Vector3.up * 2f;
             PopupManager.Instance.ShowPopup($"+{tile.GetTileAmount()}", tileSprite, popupPosition);
         }
     }

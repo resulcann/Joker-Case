@@ -19,7 +19,7 @@ public class OuterTile : MonoBehaviour
         }
     }
 
-    private void SetRotation(GameObject building)
+    private void SetRotation(GameObject building) // binalara bulunduğu tile'ın konumuna göre orta noktaya bakacak şekilde rotasyon veriliyor.
     {
         var worldPosition = transform.position;
         

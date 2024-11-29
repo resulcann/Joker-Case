@@ -4,15 +4,14 @@ using TMPro;
 
 public class Popup : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI text; // Toplanan miktarı gösterecek yazı
-    [SerializeField] private Image image;          // Toplanan türün simgesini gösterecek resim
+    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private Image image;
     [SerializeField] private float lifeTime = 1f;  // Popup'ın ekranda kalma süresi
 
-    private RectTransform _rectTransform;         // UI için RectTransform
+    private RectTransform _rectTransform;
     private Vector2 _startPosition;
     private Vector2 _endPosition;
     private float _elapsedTime;
-
     private Camera _mainCamera;
 
     private void Awake()

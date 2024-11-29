@@ -7,7 +7,7 @@ public class InventoryManager : GenericSingleton<InventoryManager>
     [System.Serializable]
     public class FruitUI
     {
-        public string type; // Meyve türü
+        public string type;
         public TMP_Text amount;
         public string prefKey;
     }

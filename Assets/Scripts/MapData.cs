@@ -10,7 +10,7 @@ public class GridInfo
 [System.Serializable]
 public class InnerTileInfo
 {
-    public int index;  // Inner tile'ın sırası
+    public int index;  // Inner tile'ın listedeki indexi
     public string type; // Inner tile'ın türü
     public string amount; // Tile'daki miktar
 }
@@ -18,7 +18,7 @@ public class InnerTileInfo
 [System.Serializable]
 public class OuterTileInfo
 {
-    public int index; // Outer tile'ın sırası
+    public int index; // Outer tile'ın listedeki indexi
     public string type; // Outer tile'ın türü
 }
 

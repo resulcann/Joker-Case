@@ -81,21 +81,20 @@ public class DiceController : GenericSingleton<DiceController>
 
             // Zar spawn pozisyonu
             var spawnPosition = new Vector3(xPosition, diceSpawnPoint.position.y, zPosition);
-
-            // Zar oluşturuluyor
+            
             var dice = Instantiate(dicePrefab, spawnPosition, Quaternion.identity, diceContainer);
             dice.SetTargetValue(diceValues[i]);
             dice.Roll(spawnPosition); // Zar animasyonuna başla
 
             _currentDice.Add(dice);
 
-            yield return new WaitForSeconds(timeThresholdBetweenDices); // Zarlar arası gecikme
+            yield return new WaitForSeconds(timeThresholdBetweenDices); // Zarların atılma arası gecikme
         }
 
         // Tüm zarların durmasını bekle
         yield return new WaitUntil(AllDiceStopped);
 
-        onComplete?.Invoke(); // İşlem tamamlandı
+        onComplete?.Invoke();
     }
     
     private bool AllDiceStopped()
