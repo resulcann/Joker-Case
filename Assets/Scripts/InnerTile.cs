@@ -62,7 +62,7 @@ public class InnerTile : MonoBehaviour
 
     private void UpdateAmountText()
     {
-        amountText.text = GameUtilities.Instance.FormatNumber(Amount);
+        amountText.text = GameUtility.FormatNumber(Amount);
         amountText.gameObject.SetActive(Amount > 0);
     }
 }

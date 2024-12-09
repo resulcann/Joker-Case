@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2981403279955529457}
   - component: {fileID: 4629306954088207436}
   m_Layer: 5
-  m_Name: Popup
+  m_Name: FruitAnimation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

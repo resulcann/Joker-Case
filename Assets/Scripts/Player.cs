@@ -137,13 +137,13 @@ public class Player : GenericSingleton<Player>
             // Popup göster
             var tileSprite = TileController.Instance.GetTileSprite(tile.TileType);
             var popupPosition = tile.transform.position + Vector3.up * 2f;
-            PopupManager.Instance.ShowPopup($"+{tile.Amount}", tileSprite, popupPosition);
+            FruitAnimationManager.Instance.ShowPopup($"+{tile.Amount}", tileSprite, popupPosition);
         }
     }
 
     private void UpdateStepText()
     {
-        stepCountText.text = GameUtilities.Instance.FormatNumber(_totalStepsToMove);
+        stepCountText.text = GameUtility.FormatNumber(_totalStepsToMove);
     }
 
 }

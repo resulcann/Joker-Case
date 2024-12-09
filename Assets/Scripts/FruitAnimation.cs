@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Popup : MonoBehaviour
+public class FruitAnimation : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Image image;
@@ -54,7 +54,7 @@ public class Popup : MonoBehaviour
         
         if (_elapsedTime >= lifeTime)
         {
-            PopupManager.Instance.ReturnToPool(this);
+            FruitAnimationManager.Instance.ReturnToPool(this);
         }
     }
 }

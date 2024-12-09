@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PopupManager : GenericSingleton<PopupManager>
+public class FruitAnimationManager : GenericSingleton<FruitAnimationManager>
 {
-    [SerializeField] private Popup popupPrefab; 
+    [SerializeField] private FruitAnimation fruitAnimationPrefab; 
     [SerializeField] private Transform popupParent;
 
-    private readonly Queue<Popup> _popupPool = new Queue<Popup>();
+    private readonly Queue<FruitAnimation> _popupPool = new Queue<FruitAnimation>();
 
-    public Popup GetPopup()
+    public FruitAnimation GetPopup()
     {
         if (_popupPool.Count > 0)
         {
@@ -18,13 +18,13 @@ public class PopupManager : GenericSingleton<PopupManager>
         }
 
         // Havuzda yoksa yeni bir popup oluştur
-        return Instantiate(popupPrefab, popupParent);
+        return Instantiate(fruitAnimationPrefab, popupParent);
     }
 
-    public void ReturnToPool(Popup popup)
+    public void ReturnToPool(FruitAnimation fruitAnimation)
     {
-        popup.gameObject.SetActive(false);
-        _popupPool.Enqueue(popup);
+        fruitAnimation.gameObject.SetActive(false);
+        _popupPool.Enqueue(fruitAnimation);
     }
 
     public void ShowPopup(string message, Sprite sprite, Vector3 position)
