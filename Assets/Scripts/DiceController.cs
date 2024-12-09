@@ -8,56 +8,91 @@ using UnityEngine.UI;
 public class DiceController : GenericSingleton<DiceController>
 {
     [Header("References")]
-    [SerializeField] private TMP_Dropdown diceDropdown; // Dropdown menü
+    [SerializeField] private TMP_Dropdown diceDropdown; 
     [SerializeField] private Button rollButton;
     [SerializeField] private Button diceSettingsBtn;
     [SerializeField] private Transform diceSettingsParent;
     [Space]
-    [SerializeField] private Dice dicePrefab; // Zar prefab
-    [SerializeField] private Transform diceSpawnPoint; // Zarların spawnlanacağı nokta
-    [SerializeField] private Transform diceContainer; // Zarların tutulacağı parent
+    [SerializeField] private Dice dicePrefab; 
+    [SerializeField] private Transform diceSpawnPoint; 
+    [SerializeField] private Transform diceContainer; 
     [Space]
     [SerializeField] private float gapBetweenDices = 0.5f;
     [SerializeField] private float gapBetweenRows = 1f;
     [SerializeField] private int maxDicePerRow;
-    [SerializeField] private float timeThresholdBetweenDices = 0;
+    [SerializeField] private float timeThresholdBetweenDices;
     [Space] [Header("Dice Value Settings")]
     [SerializeField] private int minDiceValue = 1;
     [SerializeField] private int maxDiceValue = 6;
-    
+
+    [Header("Pooling Settings")]
+    [SerializeField] private int initialPoolSize = 10;
+
     private readonly List<Dice> _currentDice = new();
+    private readonly Queue<Dice> _dicePool = new(); // Object Pool
+
     private const string DropDownValuePrefName = "DiceDropdownValue";
-    
+
     #region PROPERTIES
-    
-        public int MinDiceValue { get => minDiceValue; set => minDiceValue = value; }
-        public int MaxDiceValue { get => maxDiceValue; set => maxDiceValue = value; }
-        public int DiceAmount { get => diceDropdown.value; set => diceDropdown.value = value; }
-    
+
+    public int MinDiceValue { get => minDiceValue; set => minDiceValue = value; }
+    public int MaxDiceValue { get => maxDiceValue; set => maxDiceValue = value; }
+    public int DiceAmount { get => diceDropdown.value; set => diceDropdown.value = value; }
+
     #endregion
 
     public void Init()
     {
+        InitializePool();
         Load();
         ShowButtons(true);
         DiceSettingsPanel.Instance.Init(DiceAmount);
-        
+
         rollButton.onClick.AddListener(OnRollButton_Clicked);
         diceSettingsBtn.onClick.AddListener(OnDiceSettingsButton_Clicked);
         diceDropdown.onValueChanged.AddListener(OnDropDownValueChanged);
-        
+    }
+
+    private void InitializePool()
+    {
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            var dice = Instantiate(dicePrefab, diceContainer);
+            dice.gameObject.SetActive(false);
+            _dicePool.Enqueue(dice);
+        }
+    }
+
+    private Dice GetDiceFromPool()
+    {
+        if (_dicePool.Count > 0)
+        {
+            var dice = _dicePool.Dequeue();
+            dice.gameObject.SetActive(true);
+            return dice;
+        }
+        else
+        {
+            var newDice = Instantiate(dicePrefab, diceContainer);
+            return newDice;
+        }
+    }
+
+    private void ReturnDiceToPool(Dice dice)
+    {
+        dice.gameObject.SetActive(false);
+        _dicePool.Enqueue(dice);
     }
 
     private void RollDices()
     {
         ShowButtons(false);
-    
-        var diceValues = DiceSettingsPanel.Instance.GetDiceValues(); 
+
+        var diceValues = DiceSettingsPanel.Instance.GetDiceValues();
+        var diceValueString = diceValues.Aggregate("", (current, dv) => current + (dv + ", "));
         
-        foreach (var dv in diceValues)
-        {
-            Debug.Log(dv);
-        }
+        Debug.Log("Dices Values: " + diceValueString);
+
         StartDiceRollProcess(diceValues, () =>
         {
             var totalValue = diceValues.Sum();
@@ -75,31 +110,29 @@ public class DiceController : GenericSingleton<DiceController>
     private IEnumerator RollDicesCoroutine(List<int> diceValues, System.Action onComplete)
     {
         ClearDice();
-        var stoppedDiceCount = 0; // Counter for stopped dices
-        var totalRows = Mathf.CeilToInt((float)diceValues.Count / maxDicePerRow); // Total rows
+        var stoppedDiceCount = 0;
+        var totalRows = Mathf.CeilToInt((float)diceValues.Count / maxDicePerRow);
 
         for (var i = 0; i < diceValues.Count; i++)
         {
-            var currentRow = i / maxDicePerRow; // Current row
-            var indexInRow = i % maxDicePerRow; // Index in row
+            var currentRow = i / maxDicePerRow;
+            var indexInRow = i % maxDicePerRow;
 
-            // X position for centering dice in the row
             var startX = -(Mathf.Min(diceValues.Count - (currentRow * maxDicePerRow), maxDicePerRow) - 1) * gapBetweenDices / 2f;
             var xPosition = startX + indexInRow * gapBetweenDices;
 
-            // Z position
             var zPosition = (totalRows > 1) ? (gapBetweenRows / 2f * (totalRows - 1)) - currentRow * gapBetweenRows : 0f;
 
             var spawnPosition = new Vector3(xPosition, diceSpawnPoint.position.y, zPosition);
-            var dice = Instantiate(dicePrefab, spawnPosition, Quaternion.identity, diceContainer);
+            var dice = GetDiceFromPool();
+            dice.transform.position = spawnPosition;
             dice.SetTargetValue(diceValues[i]);
-            dice.Roll(spawnPosition); // Start dice animation
+            dice.Roll(spawnPosition);
 
-            // Subscribe to the OnDiceStopped event
             dice.OnDiceStopped += () =>
             {
                 stoppedDiceCount++;
-                if (stoppedDiceCount == diceValues.Count) // Check if all dice stopped
+                if (stoppedDiceCount == diceValues.Count)
                 {
                     onComplete?.Invoke();
                 }
@@ -107,14 +140,15 @@ public class DiceController : GenericSingleton<DiceController>
 
             _currentDice.Add(dice);
 
-            yield return new WaitForSeconds(timeThresholdBetweenDices); // Delay between dice rolls
+            yield return new WaitForSeconds(timeThresholdBetweenDices);
         }
     }
+
     private void ClearDice()
     {
         foreach (var dice in _currentDice)
         {
-            Destroy(dice.gameObject);
+            ReturnDiceToPool(dice);
         }
         _currentDice.Clear();
     }
@@ -123,7 +157,7 @@ public class DiceController : GenericSingleton<DiceController>
     {
         RollDices();
     }
-    
+
     private void OnDiceSettingsButton_Clicked()
     {
         DiceSettingsPanel.Instance.OpenDiceSettingsPanel(DiceAmount);
@@ -135,20 +169,20 @@ public class DiceController : GenericSingleton<DiceController>
         DiceSettingsPanel.Instance.UpdateDiceSettingsVisual(dropDownValue);
         Save();
     }
-    
+
     public void ShowButtons(bool show)
     {
         rollButton.gameObject.SetActive(show);
         diceSettingsBtn.gameObject.SetActive(show);
     }
-    
-    public void Save()
+
+    private void Save()
     {
         PlayerPrefs.SetInt(DropDownValuePrefName, diceDropdown.value);
         PlayerPrefs.Save();
     }
 
-    public void Load()
+    private void Load()
     {
         diceDropdown.value = PlayerPrefs.GetInt(DropDownValuePrefName, 2);
     }

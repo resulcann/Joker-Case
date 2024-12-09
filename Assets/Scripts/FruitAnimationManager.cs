@@ -1,35 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class FruitAnimationManager : GenericSingleton<FruitAnimationManager>
 {
     [SerializeField] private FruitAnimation fruitAnimationPrefab; 
-    [SerializeField] private Transform popupParent;
+    [SerializeField] private Transform parentObject;
 
-    private readonly Queue<FruitAnimation> _popupPool = new Queue<FruitAnimation>();
+    private readonly Queue<FruitAnimation> _animationPool = new Queue<FruitAnimation>();
 
-    public FruitAnimation GetPopup()
+    public FruitAnimation GetFruitAnimation() // get available animation object.
     {
-        if (_popupPool.Count > 0)
+        if (_animationPool.Count > 0)
         {
-            var popup = _popupPool.Dequeue();
-            popup.gameObject.SetActive(true);
-            return popup;
+            var fruitAnimation = _animationPool.Dequeue();
+            fruitAnimation.gameObject.SetActive(true);
+            return fruitAnimation;
         }
 
-        // Havuzda yoksa yeni bir popup oluştur
-        return Instantiate(fruitAnimationPrefab, popupParent);
+        // If there is not any available animation in pool, create new one.
+        return Instantiate(fruitAnimationPrefab, parentObject);
     }
 
-    public void ReturnToPool(FruitAnimation fruitAnimation)
+    public void ReturnToPool(FruitAnimation fruitAnimation) // returns the animation pool.
     {
         fruitAnimation.gameObject.SetActive(false);
-        _popupPool.Enqueue(fruitAnimation);
+        _animationPool.Enqueue(fruitAnimation);
     }
 
-    public void ShowPopup(string message, Sprite sprite, Vector3 position)
+    public void ShowAnimation(string message, Sprite sprite, Vector3 position) // show animation with settings.
     {
-        var popup = GetPopup();
-        popup.Setup(message, sprite, position);
+        var fruitAnimation = GetFruitAnimation();
+        fruitAnimation.Setup(message, sprite, position);
     }
 }

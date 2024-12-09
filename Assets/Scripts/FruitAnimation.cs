@@ -6,7 +6,7 @@ public class FruitAnimation : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Image image;
-    [SerializeField] private float lifeTime = 1f;  // Popup'ın ekranda kalma süresi
+    [SerializeField] private float lifeTime = 1f;  // animation lifetime
 
     private RectTransform _rectTransform;
     private Vector2 _startPosition;
@@ -25,7 +25,7 @@ public class FruitAnimation : MonoBehaviour
         text.text = message;
         image.sprite = sprite;
 
-        // Dünya pozisyonunu Canvas pozisyonuna dönüştür (canvas renderer modum camera)
+        // Translates world position to canvas position, ( my canvas renderer is Camera )
         var screenPosition = _mainCamera.WorldToScreenPoint(worldPosition); // Dünya -> Ekran pozisyonu
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _rectTransform.parent.GetComponent<RectTransform>(),
@@ -46,7 +46,7 @@ public class FruitAnimation : MonoBehaviour
         var progress = _elapsedTime / lifeTime;
         _rectTransform.anchoredPosition = Vector2.Lerp(_startPosition, _endPosition, progress);
 
-        // Alfa değerini azaltarak kaybolma efekti
+        // decreasing alpha by time to good effects
         var color = text.color;
         color.a = Mathf.Lerp(1f, 0f, progress);
         text.color = color;

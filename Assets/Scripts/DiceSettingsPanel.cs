@@ -38,8 +38,7 @@ public class DiceSettingsPanel : GenericSingleton<DiceSettingsPanel>
     {
         foreach (var ds in diceSettingsList)
         {
-            ds.SetDiceValue(Random.Range(1, 7));
-            ds.UpdateInputFieldText();
+            ds.CurrentDiceValue = Random.Range(DiceController.Instance.MinDiceValue, DiceController.Instance.MaxDiceValue);
         }
     }
 
@@ -71,10 +70,9 @@ public class DiceSettingsPanel : GenericSingleton<DiceSettingsPanel>
         {
             if (ds.gameObject.activeSelf)
             {
-                diceValues.Add(ds.GetCurrentDiceValue());
+                diceValues.Add(ds.CurrentDiceValue);
             }
         }
         return diceValues;
     }
-
 }

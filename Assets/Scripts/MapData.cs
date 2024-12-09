@@ -3,23 +3,23 @@ using System.Collections.Generic;
 [System.Serializable]
 public class GridInfo
 {
-    public float tileSize;  // Her bir Tile'ın boyutu
-    public int gridSize;    // Satır,sütun sayısı (NxN)
+    public float tileSize;  // Tile size
+    public int gridSize;    // Grid size (Row X Column) (NxN)
 }
 
 [System.Serializable]
 public class InnerTileInfo
 {
-    public int index;  // Inner tile'ın listedeki indexi
-    public string type; // Inner tile'ın türü
-    public string amount; // Tile'daki miktar
+    public int index;  // index in list
+    public string type; // tile type
+    public string amount; // amount at tile
 }
 
 [System.Serializable]
 public class OuterTileInfo
 {
-    public int index; // Outer tile'ın listedeki indexi
-    public string type; // Outer tile'ın türü
+    public int index; // index in list
+    public string type; // tile type
 }
 
 [System.Serializable]

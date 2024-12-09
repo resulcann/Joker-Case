@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class MapGenerator : GenericSingleton<MapGenerator>
 {
     [SerializeField] private TextAsset mapDataJsonFile;
-    private MapData _mapData;
+    public MapData MapData { get; private set; }
 
     public void Init()
     {
@@ -12,18 +13,19 @@ public class MapGenerator : GenericSingleton<MapGenerator>
 
     private void LoadAndGenerateMap()
     {
-        if (mapDataJsonFile == null || TileController.Instance == null) // json dosyası veya tilecnotroller kontrolü
+        if (mapDataJsonFile == null)
         {
-            Debug.LogError("JSON file or TileController is missing!");
-            return;
+            throw new NullReferenceException("Map data JSON file is null.");
         }
 
-        // mapdata json okunuyor.
-        _mapData = JsonUtility.FromJson<MapData>(mapDataJsonFile.text);
-
-        // Tilelar oluşturuluyor.
-        TileController.Instance.GenerateTiles(_mapData);
+        try
+        {
+            MapData = JsonUtility.FromJson<MapData>(mapDataJsonFile.text);
+            TileController.Instance.GenerateTiles(MapData);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to load map data: {ex.Message}");
+        }
     }
-    
-    public MapData GetMapData() => _mapData;
 }

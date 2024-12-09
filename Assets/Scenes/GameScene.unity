@@ -9255,7 +9255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b25e657f936fd4cbf82065487e5528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruitAnimationPrefab: {fileID: 0}
+  fruitAnimationPrefab: {fileID: 4629306954088207436, guid: e5ca6562cbaef2d47a280e3053d55470, type: 3}
   popupParent: {fileID: 10756433}
 --- !u!114 &1325303866 stripped
 MonoBehaviour:
@@ -11920,7 +11920,6 @@ GameObject:
   - component: {fileID: 1682215127}
   - component: {fileID: 1682215130}
   - component: {fileID: 1682215129}
-  - component: {fileID: 1682215131}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -11956,7 +11955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ef1727e76b1864db43ec8320566069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerAnimationController: {fileID: 1682215131}
+  animator: {fileID: 1760402048}
   stepCountText: {fileID: 260104524}
   moveSpeed: 6
   rotationSpeed: 720
@@ -11986,19 +11985,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.875, z: 0}
---- !u!114 &1682215131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682215126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54a2615eef49fc94282cc0c47afeb413, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 1760402048}
 --- !u!114 &1685430874 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4192973367495019851, guid: 59cdef0bc69846647aba8e0ce3cb92c1, type: 3}
@@ -13239,6 +13225,7 @@ MonoBehaviour:
   timeThresholdBetweenDices: 0
   minDiceValue: 1
   maxDiceValue: 6
+  initialPoolSize: 10
 --- !u!1 &1880452742
 GameObject:
   m_ObjectHideFlags: 0

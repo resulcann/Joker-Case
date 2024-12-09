@@ -24,10 +24,10 @@ public class InventoryManager : GenericSingleton<InventoryManager>
     }
 
     /// <summary>
-    /// Meyve miktarını arttırır ve UI'yi günceller.
+    /// Increases fruit amount and updates it.
     /// </summary>
-    /// <param name="fruitType">Meyve türü</param>
-    /// <param name="amount">Eklenecek miktar</param>
+    /// <param name="fruitType">Fruit type</param>
+    /// <param name="amount">Amount to add</param>
     public void AddFruit(string fruitType, int amount)
     {
         if (_fruitInventory.ContainsKey(fruitType))
@@ -38,14 +38,14 @@ public class InventoryManager : GenericSingleton<InventoryManager>
         }
         else
         {
-            Debug.LogWarning($"Fruit type not found: {fruitType}");
+            throw new System.Exception($"Fruit type {fruitType} not found");
         }
     }
 
     /// <summary>
-    /// Meyve miktarını UI'ye günceller.
+    /// Updates fruit amounts on canvas.
     /// </summary>
-    /// <param name="fruitType">Meyve türü</param>
+    /// <param name="fruitType">Fruit Type</param>
     private void UpdateFruitUI(string fruitType)
     {
         foreach (var fruitUI in fruitUIList)
@@ -60,7 +60,7 @@ public class InventoryManager : GenericSingleton<InventoryManager>
     }
 
     /// <summary>
-    /// Tüm UI elemanlarını günceller.
+    /// Updates all fruit's UI elements.
     /// </summary>
     private void UpdateAllFruitUI()
     {
@@ -71,7 +71,7 @@ public class InventoryManager : GenericSingleton<InventoryManager>
     }
 
     /// <summary>
-    /// Meyvenin değerini saveler.
+    /// Saves values of fruit
     /// </summary>
     private void SaveFruit(string fruitType)
     {
@@ -87,7 +87,7 @@ public class InventoryManager : GenericSingleton<InventoryManager>
     }
 
     /// <summary>
-    /// Tüm meyve envanterini yükler.
+    /// Loads fruits.
     /// </summary>
     private void LoadInventory()
     {

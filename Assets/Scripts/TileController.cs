@@ -61,7 +61,7 @@ public class TileController : GenericSingleton<TileController>
 
     private void GenerateOuterTiles(MapData mapData)
     {
-        var outerGridSize = mapData.grid.gridSize + 2; // Dış katman için grid size +2
+        var outerGridSize = mapData.grid.gridSize + 2; // For outer layer grid size +2
         var tileSize = mapData.grid.tileSize;
 
         var startX = -(outerGridSize / 2f) * tileSize + (tileSize / 2f);
@@ -76,7 +76,7 @@ public class TileController : GenericSingleton<TileController>
 
             if (tile != null)
             {
-                tile.SetType("Empty"); // Varsayılan olarak atanıyor.
+                tile.Type = "Empty"; // default value set to empty
                 tile.name = $"OuterTile_{i}";
                 _outerTiles.Add(tile);
             }
@@ -86,31 +86,31 @@ public class TileController : GenericSingleton<TileController>
         {
             if (outerTileInfo.index >= 0 && outerTileInfo.index < _outerTiles.Count)
             {
-                _outerTiles[outerTileInfo.index].SetType(outerTileInfo.type);
+                _outerTiles[outerTileInfo.index].Type = outerTileInfo.type;
             }
         }
     }
 
     private Vector3 CalculateTilePosition(int index, int rowCount, int columnCount, float startX, float startZ, float tileSize)
     {
-        // Sol kenar
+        // left edge
         if (index < columnCount)
         {
             return new Vector3(startX, 0, startZ + index * tileSize);
         }
-        // Üst kenar
-        else if (index < columnCount + rowCount - 1)
+        // top edge
+        if (index < columnCount + rowCount - 1)
         {
             var relativeIndex = index - columnCount;
             return new Vector3(startX + (relativeIndex + 1) * tileSize, 0, startZ + (columnCount - 1) * tileSize);
         }
-        // Sağ kenar
-        else if (index < columnCount * 2 + rowCount - 2)
+        // right edge
+        if (index < columnCount * 2 + rowCount - 2)
         {
             var relativeIndex = index - (columnCount + rowCount - 1);
             return new Vector3(startX + (rowCount - 1) * tileSize, 0, startZ + (columnCount - 2 - relativeIndex) * tileSize);
         }
-        // Alt kenar
+        // bottom edge
         else
         {
             var relativeIndex = index - (columnCount * 2 + rowCount - 2);
@@ -120,21 +120,18 @@ public class TileController : GenericSingleton<TileController>
 
     public Color GetTileColorByType(string tileType)
     {
-        var index = MapGenerator.Instance.GetMapData().innerTileTypes.IndexOf(tileType);
+        var index = MapGenerator.Instance.MapData.innerTileTypes.IndexOf(tileType);
         
         if (index >= 0 && index < tileColors.Length)
         {
             return tileColors[index];
         }
 
-        Debug.LogWarning($"Tile type not found: {tileType}"); // Tile tipi bulunamazsa error verir
-        return Color.gray;
+        throw new System.NullReferenceException($"Tile type not found: {tileType}");
     }
 
     
     public List<InnerTile> GetInnerTiles() => _innerTiles;
-    public float GetOuterGridSize() => MapGenerator.Instance.GetMapData().grid.gridSize + 2; // Outer grid boyutu (dış katman)
-    public float GetTileSize() => MapGenerator.Instance.GetMapData().grid.tileSize; // Tile boyutu
     public Sprite GetTileSprite(string tileType)
     {
         return tileType switch

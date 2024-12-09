@@ -2,76 +2,83 @@
 
 public class OuterTile : MonoBehaviour
 {
-    public void SetType(string type)
+    private string _type;
+
+    public string Type
     {
-        UpdateVisual(type);
+        get => _type;
+        set
+        {
+            _type = value;
+            UpdateVisual();
+        }
     }
 
-    private void UpdateVisual(string type)
+    private void UpdateVisual()
     {
-        var buildingPrefab = Resources.Load<GameObject>($"Prefabs/Buildings/{type}");
+        var buildingPrefab = Resources.Load<GameObject>($"Prefabs/Buildings/{Type}");
         if (buildingPrefab != null)
         {
             var building = Instantiate(buildingPrefab, transform);
-            building.name = $"{type}_Instance";
-        
+            building.name = $"{Type}_Instance";
+
             SetRotation(building);
         }
     }
 
-    private void SetRotation(GameObject building) // binalara bulunduğu tile'ın konumuna göre orta noktaya bakacak şekilde rotasyon veriliyor.
+    private void SetRotation(GameObject building) // building are rotating to center
     {
         var worldPosition = transform.position;
-        
-        var gridSize = TileController.Instance.GetOuterGridSize(); // Outer grid boyutu
-        var tileSize = TileController.Instance.GetTileSize(); // Tile boyutu
-        var halfGrid = ((gridSize / 2f) - 0.5f) * tileSize; // Yarı grid boyutu (dış katman)
-        
-        float tolerance = 0.01f;
 
-        // Kenar ve köşe kontrolü
+        var gridSize = MapGenerator.Instance.MapData.grid.gridSize + 2; // Outer grid size
+        var tileSize = MapGenerator.Instance.MapData.grid.tileSize; // Tile size
+        var halfGrid = ((gridSize / 2f) - 0.5f) * tileSize; // half grid size
+
+        const float tolerance = 0.01f;
+
+        // edge and corner control
         var isLeft = Mathf.Abs(worldPosition.x - (-halfGrid)) < tolerance;
         var isRight = Mathf.Abs(worldPosition.x - (halfGrid)) < tolerance;
         var isBottom = Mathf.Abs(worldPosition.z - (-halfGrid)) < tolerance;
         var isTop = Mathf.Abs(worldPosition.z - (halfGrid)) < tolerance;
 
-        // Sol köşe
+        // left corner
         if (isLeft && isTop)
         {
-            building.transform.localEulerAngles = new Vector3(0, 90, 0); // Sağa bak
+            building.transform.localEulerAngles = new Vector3(0, 90, 0); // look right
         }
         else if (isLeft && isBottom)
         {
-            building.transform.localEulerAngles = new Vector3(0, 90, 0); // Sağa bak
+            building.transform.localEulerAngles = new Vector3(0, 90, 0); // look right
         }
-        // Sağ köşe
+        // right corner
         else if (isRight && isTop)
         {
-            building.transform.localEulerAngles = new Vector3(0, -90, 0); // Sola bak
+            building.transform.localEulerAngles = new Vector3(0, -90, 0); // look left
         }
         else if (isRight && isBottom)
         {
-            building.transform.localEulerAngles = new Vector3(0, -90, 0); // Sola bak
+            building.transform.localEulerAngles = new Vector3(0, -90, 0); // look left
         }
-        // Sol kenar
+        // left edge
         else if (isLeft)
         {
-            building.transform.localEulerAngles = new Vector3(0, 90, 0); // Sağa bak
+            building.transform.localEulerAngles = new Vector3(0, 90, 0); // look right
         }
-        // Sağ kenar
+        // right edge
         else if (isRight)
         {
-            building.transform.localEulerAngles = new Vector3(0, -90, 0); // Sola bak
+            building.transform.localEulerAngles = new Vector3(0, -90, 0); // look left
         }
-        // Üst kenar
+        // top edge
         else if (isTop)
         {
-            building.transform.localEulerAngles = new Vector3(0, 180, 0); // Aşağı bak
+            building.transform.localEulerAngles = new Vector3(0, 180, 0); // look bottom
         }
-        // Alt kenar
+        // bottom edge
         else if (isBottom)
         {
-            building.transform.localEulerAngles = new Vector3(0, 0, 0); // Yukarı bak
+            building.transform.localEulerAngles = new Vector3(0, 0, 0); // look top
         }
     }
 }

@@ -6,28 +6,31 @@ using UnityEngine;
 public class Player : GenericSingleton<Player>
 {
     [Header("REFERENCES")]
-    [SerializeField] private PlayerAnimationController playerAnimationController;
+    [SerializeField] private Animator animator;
     [SerializeField] private TextMeshProUGUI stepCountText;
     [Space]
     [Header("MOVE SETTINGS")]
-    [SerializeField] private float moveSpeed = 5f; // hareket hızı
-    [SerializeField] private float rotationSpeed = 5f; // dönüş hızı
+    [SerializeField] private float moveSpeed = 5f; // move speed
+    [SerializeField] private float rotationSpeed = 5f; // rotate speed
     
-    private int _currentTileIndex = 0; // oyuncunun bulunduğu Tile indeksi
-    private bool _isMoving = false; // Hareket ediyor mu
-    private int _totalStepsToMove = 0; // Oyuncunun totalde edeceği hareket sayısı
+    private int _currentTileIndex = 0;
+    private bool _isMoving = false; // is player moving?
+    private int _totalStepsToMove = 0; // player's total step count
+    
+    private static readonly int Idle = Animator.StringToHash("Idle");
+    private static readonly int Run = Animator.StringToHash("Run");
     
     public void Init()
     {
         var tiles = TileController.Instance.GetInnerTiles();
         if (tiles != null && tiles.Count > 0)
         {
-            var startTile = tiles[0].transform; // 0. Tile
-            transform.position = startTile.position; // Oyuncu başlangıç pozisyonuna yerleştiriliyor (0. indekse)
-            LookAtNextTile(); // Oyuncunun yönü bir sonraki tile'a bakacak şekilde ayarlanıyor.
+            var startTile = tiles[0].transform; // Tile 0
+            transform.position = startTile.position; // Player moving to start tile (index 0)
+            LookAtNextTile(); // Character rotating to next tile, character will be looking next tile
         }
         
-        playerAnimationController.PlayIdleAnimation();
+        PlayIdleAnimation();
         UpdateStepText();
     }
     
@@ -35,23 +38,23 @@ public class Player : GenericSingleton<Player>
 #if UNITY_EDITOR
     private void Update()
     {
-        // TEST İÇİN KLAVYE İLE HAREKET
+        // Editor test
         if (Input.GetKeyDown(KeyCode.Space) && !_isMoving)
         {
-            AddSteps(1); // Space tuşuna basıldığında toplam adımlara +1 ekle
+            AddSteps(1); // when "space" key down add +1 step
         }
         if (Input.GetKeyDown(KeyCode.S) && !_isMoving)
         {
-            AddSteps(3); // S tuşuna basıldığında toplam adımlara +3 ekle
+            AddSteps(3); // when "s" key down add +3 step
         }
     }
 #endif
     
     
     /// <summary>
-    /// Hareket edilecek total adım sayısına ekleme yapar.
+    /// Increases to total step count
     /// </summary>
-    /// <param name="stepsToAdd">Eklenmek istenen adım sayısı</param>
+    /// <param name="stepsToAdd">Steps amount</param>
     public void AddSteps(int stepsToAdd)
     {
         _totalStepsToMove += stepsToAdd;
@@ -68,48 +71,52 @@ public class Player : GenericSingleton<Player>
         var tiles = TileController.Instance.GetInnerTiles();
         _isMoving = true;
         
-        // Koşma animasyonu
-        playerAnimationController.PlayRunAnimation();
+        // Plays running animation
+        PlayRunAnimation();
 
         while (_totalStepsToMove > 0)
         {
-            // index bir sonraki tile'a ayarlanıyor
+            // index setting up to next tile.
             _currentTileIndex = (_currentTileIndex + 1) % tiles.Count;
 
-            // Oyuncuyu sıradaki Tile'a hareket ediyor
+            // player moves to next tile
             yield return StartCoroutine(MoveToTile(tiles[_currentTileIndex].transform.position));
 
-            // Gidilecek toplam adım sayısı azaltılıyor.
+            // total step count decreasing 1
             _totalStepsToMove--;
             UpdateStepText();
         }
         
-        // Burada varsa tiledaki kaynak toplanıyor.
+        // when player stopped and if there is a collectible fruit. Player collects it.
         CollectTileResources(tiles[_currentTileIndex]);
 
         _isMoving = false;
-        playerAnimationController.PlayIdleAnimation();
+        PlayIdleAnimation();
     }
 
     /// <summary>
-    /// Oyuncuyu belirtilen pozisyona yumuşakça hareket ettirir.
+    /// Moves player to target tile.
     /// </summary>
-    /// <param name="targetPosition">Hedef Tile'ın pozisyonu</param>
+    /// <param name="targetPosition">Target tile position.</param>
+    /// <param name="immediately">Move to tile immediately.</param>
     /// <returns></returns>
-    private IEnumerator MoveToTile(Vector3 targetPosition)
+    private IEnumerator MoveToTile(Vector3 targetPosition, bool immediately = false)
     {
-        while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+        if (!immediately)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            yield return null;
+            while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+                yield return null;
+            }
         }
-
-        transform.position = targetPosition; // Kesin pozisyon
-        LookAtNextTile(); // Bir sonraki tile'a dön
+        
+        transform.position = targetPosition; // absolute position
+        LookAtNextTile(); // Rotate to next tile
     }
 
     /// <summary>
-    /// Oyuncuyu bir sonraki Tile'a doğru döndürür.
+    /// Rotates player to next tile.
     /// </summary>
     private void LookAtNextTile()
     {
@@ -117,7 +124,7 @@ public class Player : GenericSingleton<Player>
 
         if (tiles != null && tiles.Count > 0)
         {
-            var nextIndex = (_currentTileIndex + 1) % tiles.Count; // Bir sonraki Tile'ın indeksi
+            var nextIndex = (_currentTileIndex + 1) % tiles.Count; // next tile index
             var direction = (tiles[nextIndex].transform.position - transform.position).normalized;
             var targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
@@ -125,25 +132,37 @@ public class Player : GenericSingleton<Player>
     }
     
     /// <summary>
-    /// Oyuncu bir Tile'dan geçtiğinde kaynağı toplar.
+    /// Player collects resources.
     /// </summary>
     private void CollectTileResources(InnerTile tile)
     {
         if (!string.IsNullOrEmpty(tile.TileType) && tile.Amount > 0)
         {
-            // Inventory'e ekle
+            // Add to inventory
             InventoryManager.Instance.AddFruit(tile.TileType, tile.Amount);
 
-            // Popup göster
+            // Show fruit animation
             var tileSprite = TileController.Instance.GetTileSprite(tile.TileType);
             var popupPosition = tile.transform.position + Vector3.up * 2f;
-            FruitAnimationManager.Instance.ShowPopup($"+{tile.Amount}", tileSprite, popupPosition);
+            FruitAnimationManager.Instance.ShowAnimation($"+{tile.Amount}", tileSprite, popupPosition);
         }
     }
 
     private void UpdateStepText()
     {
         stepCountText.text = GameUtility.FormatNumber(_totalStepsToMove);
+    }
+    
+    private void PlayIdleAnimation()
+    {
+        animator.SetBool(Idle, true);
+        animator.SetBool(Run, false);
+    }
+
+    private void PlayRunAnimation()
+    {
+        animator.SetBool(Idle, false);
+        animator.SetBool(Run, true);
     }
 
 }

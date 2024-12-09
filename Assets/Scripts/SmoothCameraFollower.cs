@@ -9,7 +9,7 @@ public class SmoothCameraFollower : MonoBehaviour
     [SerializeField] private bool followPosition;
     [SerializeField] private bool followRotation;
     
-    // Deadzone ayarları
+    // Deadzone settings
     [SerializeField] private Vector2 pitchRange;
     [SerializeField] private Vector2 yawRange;
 
