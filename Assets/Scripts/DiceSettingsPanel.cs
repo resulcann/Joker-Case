@@ -30,7 +30,6 @@ public class DiceSettingsPanel : GenericSingleton<DiceSettingsPanel>
     }
     private void CloseDiceSettingsPanel()
     {
-        //diceSettingsList.ForEach(ds => ds.Save());
         inner.gameObject.SetActive(false);
         DiceController.Instance.ShowButtons(true);
     }
@@ -59,11 +58,11 @@ public class DiceSettingsPanel : GenericSingleton<DiceSettingsPanel>
     {
         if (diceValue < 0 || diceValue >= diceSprites.Length)
         {
-            Debug.LogWarning("Dice value is out of bounds!");
-            return null;
+            throw new System.ArgumentOutOfRangeException(nameof(diceValue), $"Dice value must be between 0 and {diceSprites.Length - 1}, but was {diceValue}.");
         }
         return diceSprites[diceValue];
     }
+
     
     public List<int> GetDiceValues()
     {

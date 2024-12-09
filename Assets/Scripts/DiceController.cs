@@ -21,15 +21,26 @@ public class DiceController : GenericSingleton<DiceController>
     [SerializeField] private float gapBetweenRows = 1f;
     [SerializeField] private int maxDicePerRow;
     [SerializeField] private float timeThresholdBetweenDices = 0;
+    [Space] [Header("Dice Value Settings")]
+    [SerializeField] private int minDiceValue = 1;
+    [SerializeField] private int maxDiceValue = 6;
     
     private readonly List<Dice> _currentDice = new();
     private const string DropDownValuePrefName = "DiceDropdownValue";
+    
+    #region PROPERTIES
+    
+        public int MinDiceValue { get => minDiceValue; set => minDiceValue = value; }
+        public int MaxDiceValue { get => maxDiceValue; set => maxDiceValue = value; }
+        public int DiceAmount { get => diceDropdown.value; set => diceDropdown.value = value; }
+    
+    #endregion
 
     public void Init()
     {
         Load();
         ShowButtons(true);
-        DiceSettingsPanel.Instance.Init(GetDiceAmount());
+        DiceSettingsPanel.Instance.Init(DiceAmount);
         
         rollButton.onClick.AddListener(OnRollButton_Clicked);
         diceSettingsBtn.onClick.AddListener(OnDiceSettingsButton_Clicked);
@@ -64,49 +75,41 @@ public class DiceController : GenericSingleton<DiceController>
     private IEnumerator RollDicesCoroutine(List<int> diceValues, System.Action onComplete)
     {
         ClearDice();
-        
-        var totalRows = Mathf.CeilToInt((float)diceValues.Count / maxDicePerRow); // Toplam satır sayısı
+        var stoppedDiceCount = 0; // Counter for stopped dices
+        var totalRows = Mathf.CeilToInt((float)diceValues.Count / maxDicePerRow); // Total rows
 
         for (var i = 0; i < diceValues.Count; i++)
         {
-            var currentRow = i / maxDicePerRow; // Şu anki satır
-            var indexInRow = i % maxDicePerRow; // Satırdaki indeks
-        
-            // X ekseninde pozisyon (satırdaki zarları ortalamak için hesaplanır)
+            var currentRow = i / maxDicePerRow; // Current row
+            var indexInRow = i % maxDicePerRow; // Index in row
+
+            // X position for centering dice in the row
             var startX = -(Mathf.Min(diceValues.Count - (currentRow * maxDicePerRow), maxDicePerRow) - 1) * gapBetweenDices / 2f;
             var xPosition = startX + indexInRow * gapBetweenDices;
 
-            // Z ekseninde pozisyon
+            // Z position
             var zPosition = (totalRows > 1) ? (gapBetweenRows / 2f * (totalRows - 1)) - currentRow * gapBetweenRows : 0f;
 
-            // Zar spawn pozisyonu
             var spawnPosition = new Vector3(xPosition, diceSpawnPoint.position.y, zPosition);
-            
             var dice = Instantiate(dicePrefab, spawnPosition, Quaternion.identity, diceContainer);
             dice.SetTargetValue(diceValues[i]);
-            dice.Roll(spawnPosition); // Zar animasyonuna başla
+            dice.Roll(spawnPosition); // Start dice animation
+
+            // Subscribe to the OnDiceStopped event
+            dice.OnDiceStopped += () =>
+            {
+                stoppedDiceCount++;
+                if (stoppedDiceCount == diceValues.Count) // Check if all dice stopped
+                {
+                    onComplete?.Invoke();
+                }
+            };
 
             _currentDice.Add(dice);
 
-            yield return new WaitForSeconds(timeThresholdBetweenDices); // Zarların atılma arası gecikme
+            yield return new WaitForSeconds(timeThresholdBetweenDices); // Delay between dice rolls
         }
-
-        // Tüm zarların durmasını bekle
-        yield return new WaitUntil(AllDiceStopped);
-
-        onComplete?.Invoke();
     }
-    
-    private bool AllDiceStopped()
-    {
-        foreach (var dice in _currentDice)
-        {
-            if (!dice.HasStopped()) return false;
-        }
-        return true;
-    }
-
-
     private void ClearDice()
     {
         foreach (var dice in _currentDice)
@@ -123,7 +126,7 @@ public class DiceController : GenericSingleton<DiceController>
     
     private void OnDiceSettingsButton_Clicked()
     {
-        DiceSettingsPanel.Instance.OpenDiceSettingsPanel(GetDiceAmount());
+        DiceSettingsPanel.Instance.OpenDiceSettingsPanel(DiceAmount);
         ShowButtons(false);
     }
 
@@ -138,8 +141,7 @@ public class DiceController : GenericSingleton<DiceController>
         rollButton.gameObject.SetActive(show);
         diceSettingsBtn.gameObject.SetActive(show);
     }
-    public int GetDiceAmount() => diceDropdown.value;
-
+    
     public void Save()
     {
         PlayerPrefs.SetInt(DropDownValuePrefName, diceDropdown.value);
@@ -149,6 +151,5 @@ public class DiceController : GenericSingleton<DiceController>
     public void Load()
     {
         diceDropdown.value = PlayerPrefs.GetInt(DropDownValuePrefName, 2);
-        diceDropdown.onValueChanged?.Invoke(diceDropdown.value);
     }
 }

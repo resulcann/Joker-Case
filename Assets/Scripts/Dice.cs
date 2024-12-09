@@ -4,16 +4,16 @@ using UnityEngine;
 public class Dice : MonoBehaviour
 {
     [Header("Dice Roll Settings")]
-    [SerializeField] private float fallHeight = 5f; // zarların başlangıç yüksekliği
-    [SerializeField] private float fallDuration = 1.5f; // zarların düşme süresi
-    [SerializeField] private float spinSpeed = 720f; // zarların düşerken dönüş hızı
-
-    private int _targetValue; // zarın hedef değeri
-    private bool _hasStopped; // zar durdu mu?
+    [SerializeField] private float fallHeight = 5f; // starting height for the dice
+    [SerializeField] private float fallDuration = 1.5f; // time it takes for the dice to fall
+    [SerializeField] private float spinSpeed = 720f; // rotation speed while falling
+    
+    private int _targetValue; // the target value for the dice
+    public event System.Action OnDiceStopped;
 
     private readonly Quaternion[] _faceRotations = new Quaternion[]
     {
-        Quaternion.Euler(-90, 0, 0),   // 1 (üst yüz)
+        Quaternion.Euler(-90, 0, 0),   // 1
         Quaternion.Euler(0, 0, 0),    // 2
         Quaternion.Euler(0, 0, -90),  // 3
         Quaternion.Euler(180, 0, -90),// 4
@@ -23,12 +23,12 @@ public class Dice : MonoBehaviour
 
     public void SetTargetValue(int value)
     {
-        _targetValue = Mathf.Clamp(value, 1, 6); // 1 ile 6 arasında sınırla
+        var diceController = DiceController.Instance;
+        _targetValue = Mathf.Clamp(value, diceController.MinDiceValue, diceController.MaxDiceValue);
     }
 
     public void Roll(Vector3 spawnPosition)
     {
-        _hasStopped = false;
         StartCoroutine(RollCoroutine(spawnPosition));
     }
 
@@ -38,18 +38,18 @@ public class Dice : MonoBehaviour
         var endPosition = spawnPosition + Vector3.up * 0.25f;
         transform.position = startPosition;
 
-        // İlk random rotasyon
-        transform.rotation = new Quaternion(Random.Range(15f,75f), Random.Range(15f,75f), Random.Range(15f,75f), Random.Range(15f,75f));
+        // Initial random rotation
+        transform.rotation = new Quaternion(Random.Range(15f, 75f), Random.Range(15f, 75f), Random.Range(15f, 75f), Random.Range(15f, 75f));
 
-        float elapsedTime = 0f;
+        var elapsedTime = 0f;
 
-        // Düşerken rastgele rotasyon ve aşağı düşme işlemleri
+        // Falling with random rotation
         while (elapsedTime < fallDuration)
         {
             var t = elapsedTime / fallDuration;
-            transform.position = Vector3.Lerp(startPosition, endPosition, t); // yer çekimi ile beraber yere düşüş simüle ediliyor
+            transform.position = Vector3.Lerp(startPosition, endPosition, t); // simulates falling due to gravity
             
-            // Rastgele dönüş zar dönme efekti
+            // Random spin effect while falling
             transform.Rotate(Vector3.right, spinSpeed * Time.deltaTime, Space.World);
             transform.Rotate(Vector3.up, spinSpeed * Time.deltaTime, Space.Self);
             
@@ -57,11 +57,11 @@ public class Dice : MonoBehaviour
             yield return null;
         }
         
-        transform.position = endPosition; // Nihai pozisyon
-        Quaternion targetRotation = _faceRotations[_targetValue - 1];
+        transform.position = endPosition; // final position
+        var targetRotation = _faceRotations[_targetValue - 1];
         elapsedTime = 0f;
 
-        while (elapsedTime < 0.5f) // Yere ulaştığında hedef rotasyona geçiş
+        while (elapsedTime < 0.5f) // adjust to target rotation once it lands
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, elapsedTime / 0.5f);
             elapsedTime += Time.deltaTime;
@@ -69,11 +69,6 @@ public class Dice : MonoBehaviour
         }
 
         transform.rotation = targetRotation;
-        _hasStopped = true;
-    }
-
-    public bool HasStopped()
-    {
-        return _hasStopped;
+        OnDiceStopped?.Invoke();
     }
 }

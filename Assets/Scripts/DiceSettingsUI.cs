@@ -22,7 +22,7 @@ public class DiceSettingsUI : MonoBehaviour
 
     public void SetDiceValue(int diceValue)
     {
-        _currentDiceValue = Mathf.Clamp(diceValue, 1, 6);
+        _currentDiceValue = Mathf.Clamp(diceValue, DiceController.Instance.MinDiceValue, DiceController.Instance.MaxDiceValue);
         SetDiceImage();
         Save();
     }
@@ -31,11 +31,11 @@ public class DiceSettingsUI : MonoBehaviour
     {
         if (int.TryParse(input, out var value))
         {
-            SetDiceValue(Mathf.Clamp(value, 1, 6));
+            SetDiceValue(Mathf.Clamp(value, DiceController.Instance.MinDiceValue, DiceController.Instance.MaxDiceValue));
         }
         else
         {
-            _currentDiceValue = Mathf.Clamp(_currentDiceValue, 1, 6);
+            _currentDiceValue = Mathf.Clamp(_currentDiceValue, DiceController.Instance.MinDiceValue, DiceController.Instance.MaxDiceValue);
         }
 
         UpdateInputFieldText();
@@ -44,7 +44,7 @@ public class DiceSettingsUI : MonoBehaviour
     
     private void SetDiceImage()
     {
-        if (_currentDiceValue >= 1 && _currentDiceValue <= 6)
+        if (_currentDiceValue >= DiceController.Instance.MinDiceValue && _currentDiceValue <= DiceController.Instance.MaxDiceValue)
         {
             diceImg.sprite = DiceSettingsPanel.Instance.GetDiceSprite(_currentDiceValue - 1);
         }
@@ -62,7 +62,7 @@ public class DiceSettingsUI : MonoBehaviour
     }
     public void Load()
     {
-        _currentDiceValue = PlayerPrefs.GetInt(prefName, Random.Range(1,7));
+        _currentDiceValue = PlayerPrefs.GetInt(prefName, Random.Range(DiceController.Instance.MinDiceValue, DiceController.Instance.MaxDiceValue + 1));
         UpdateInputFieldText();
         SetDiceImage();
     }
