@@ -53,7 +53,7 @@ public class InventoryManager : GenericSingleton<InventoryManager>
             if (fruitUI.type == fruitType)
             {
                 var value = _fruitInventory[fruitType];
-                fruitUI.amount.text = GameManager.Instance.FormatNumber(value);
+                fruitUI.amount.text = GameUtilities.Instance.FormatNumber(value);
                 return;
             }
         }

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class InnerTile : MonoBehaviour
 {
@@ -8,32 +9,38 @@ public class InnerTile : MonoBehaviour
     [SerializeField] private TextMeshPro amountText;
     
     private MaterialPropertyBlock _propertyBlock;
-    private string _amount = "";
-    private string _type;
+
+    #region PROPERTIES
+
+    public int Amount { get; set; } = 0;
+    public string TileType { get; set; } = "";
+
+    #endregion
+    
 
     private void Awake()
     {
         _propertyBlock = new MaterialPropertyBlock();
     }
 
-    public void SetType(string type, string amount = "")
+    public void SetTileValues(string type, string amount = "")
     {
-        _type = type;
-        _amount = amount;
+        TileType = type;
+        Amount = int.TryParse(amount, out var result) ? result : 0;
 
         UpdateVisual();
     }
     
     private void UpdateVisual()
     {
-        var color = TileController.Instance.GetTileColorByType(_type);
+        var color = TileController.Instance.GetTileColorByType(TileType);
 
         _tileRenderer.GetPropertyBlock(_propertyBlock);
         _propertyBlock.SetColor("_Color", color);
         _tileRenderer.SetPropertyBlock(_propertyBlock);
 
         // Sprite ataması
-        var spriteName = _type switch
+        var spriteName = TileType switch
         {
             "Start" => "StartSprite",
             "Apple" => "AppleSprite",
@@ -42,7 +49,7 @@ public class InnerTile : MonoBehaviour
             _ => null
         };
 
-        if (_type == "Start")
+        if (TileType == "Start")
         {
             var srTransform = _spriteRenderer.transform;
             srTransform.localPosition = new Vector3(srTransform.localPosition.x, 0.0101f, 0);
@@ -55,14 +62,7 @@ public class InnerTile : MonoBehaviour
 
     private void UpdateAmountText()
     {
-        amountText.text = !string.IsNullOrEmpty(_amount) ? _amount : "";
-        amountText.gameObject.SetActive(!string.IsNullOrEmpty(_amount));
+        amountText.text = GameUtilities.Instance.FormatNumber(Amount);
+        amountText.gameObject.SetActive(Amount > 0);
     }
-    
-    public string GetTileType() => _type;
-    public int GetTileAmount()
-    {
-        return int.TryParse(_amount, out var result) ? result : 0;
-    }
-
 }

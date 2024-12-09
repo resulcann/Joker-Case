@@ -75,10 +75,6 @@ public class Player : GenericSingleton<Player>
         {
             // index bir sonraki tile'a ayarlanıyor
             _currentTileIndex = (_currentTileIndex + 1) % tiles.Count;
-            
-            // Burada varsa tiledaki kaynak toplanıyor.
-            var currentTile = tiles[_currentTileIndex];
-            CollectTileResources(currentTile);
 
             // Oyuncuyu sıradaki Tile'a hareket ediyor
             yield return StartCoroutine(MoveToTile(tiles[_currentTileIndex].transform.position));
@@ -87,6 +83,9 @@ public class Player : GenericSingleton<Player>
             _totalStepsToMove--;
             UpdateStepText();
         }
+        
+        // Burada varsa tiledaki kaynak toplanıyor.
+        CollectTileResources(tiles[_currentTileIndex]);
 
         _isMoving = false;
         playerAnimationController.PlayIdleAnimation();
@@ -130,21 +129,21 @@ public class Player : GenericSingleton<Player>
     /// </summary>
     private void CollectTileResources(InnerTile tile)
     {
-        if (!string.IsNullOrEmpty(tile.GetTileType()) && tile.GetTileAmount() > 0)
+        if (!string.IsNullOrEmpty(tile.TileType) && tile.Amount > 0)
         {
             // Inventory'e ekle
-            InventoryManager.Instance.AddFruit(tile.GetTileType(), tile.GetTileAmount());
+            InventoryManager.Instance.AddFruit(tile.TileType, tile.Amount);
 
             // Popup göster
-            var tileSprite = TileController.Instance.GetTileSprite(tile.GetTileType());
+            var tileSprite = TileController.Instance.GetTileSprite(tile.TileType);
             var popupPosition = tile.transform.position + Vector3.up * 2f;
-            PopupManager.Instance.ShowPopup($"+{tile.GetTileAmount()}", tileSprite, popupPosition);
+            PopupManager.Instance.ShowPopup($"+{tile.Amount}", tileSprite, popupPosition);
         }
     }
 
     private void UpdateStepText()
     {
-        stepCountText.text = GameManager.Instance.FormatNumber(_totalStepsToMove);
+        stepCountText.text = GameUtilities.Instance.FormatNumber(_totalStepsToMove);
     }
 
 }

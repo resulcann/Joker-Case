@@ -44,7 +44,7 @@ public class TileController : GenericSingleton<TileController>
 
             if (tile != null)
             {
-                tile.SetType("Empty");
+                tile.SetTileValues("Empty");
                 tile.name = $"InnerTile_{i}";
                 _innerTiles.Add(tile);
             }
@@ -54,7 +54,7 @@ public class TileController : GenericSingleton<TileController>
         {
             if (tileInfo.index >= 0 && tileInfo.index < _innerTiles.Count)
             {
-                _innerTiles[tileInfo.index].SetType(tileInfo.type, tileInfo.amount);
+                _innerTiles[tileInfo.index].SetTileValues(tileInfo.type, tileInfo.amount);
             }
         }
     }
