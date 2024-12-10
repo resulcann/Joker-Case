@@ -534,7 +534,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 963194227}
-  m_PlaneDistance: 1
+  m_PlaneDistance: 2
   m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -9765,12 +9765,6 @@ MonoBehaviour:
   - tileType: Strawberry
     sprite: {fileID: 21300000, guid: 7ed6aafefafe8cf4b9e47bbe00f09924, type: 3}
     tileColor: {r: 0.9686275, g: 0.60784316, b: 0.36078432, a: 1}
-  tileColors:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 0.59140146, g: 0.98039216, b: 0.4666666, a: 1}
-  - {r: 0.4666666, g: 0.82641304, b: 0.98039216, a: 1}
-  - {r: 0.78770953, g: 0.4666666, b: 0.98039216, a: 1}
-  - {r: 0.9686275, g: 0.60784316, b: 0.36078432, a: 1}
 --- !u!4 &1435017574
 Transform:
   m_ObjectHideFlags: 0
