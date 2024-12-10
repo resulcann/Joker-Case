@@ -8497,7 +8497,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1172848909}
   m_Layer: 5
-  m_Name: DiceDropdown
+  m_Name: Dropdown_DiceAmount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13338,7 +13338,7 @@ MonoBehaviour:
   timeThresholdBetweenDices: 0
   minDiceValue: 1
   maxDiceValue: 6
-  initialPoolSize: 10
+  initialPoolSize: 20
 --- !u!1 &1880452742
 GameObject:
   m_ObjectHideFlags: 0

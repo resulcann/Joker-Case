@@ -120,8 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallHeight: 5
-  fallDuration: 0.5
-  spinSpeed: 2160
+  fallDuration: 0.35
+  spinSpeed: 5000
 --- !u!54 &-7513545132419545243
 Rigidbody:
   m_ObjectHideFlags: 0

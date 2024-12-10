@@ -14,9 +14,6 @@ public class TileController : GenericSingleton<TileController>
     [Space] [Header("Tile Settings")] 
     [SerializeField] private List<TileSettings> tileSettings;
 
-    [Space] [Header("SETTINGS")] [SerializeField, Tooltip("0 = Empty, 1 = Start, 2 = Apple, 3 = Pear, 4 = Strawberry")]
-    private Color[] tileColors;
-
     private readonly List<InnerTile> _innerTiles = new();
     private readonly List<OuterTile> _outerTiles = new();
 
