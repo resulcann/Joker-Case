@@ -9256,7 +9256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fruitAnimationPrefab: {fileID: 4629306954088207436, guid: e5ca6562cbaef2d47a280e3053d55470, type: 3}
-  popupParent: {fileID: 10756433}
+  parentObject: {fileID: 0}
 --- !u!114 &1325303866 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4192973367495019851, guid: 59cdef0bc69846647aba8e0ce3cb92c1, type: 3}
@@ -9652,6 +9652,22 @@ MonoBehaviour:
   outerTilePrefab: {fileID: 2276916749226469982, guid: e1f466615d30ea44cb3e0d38197e18f3, type: 3}
   innerTilesParent: {fileID: 200348520}
   outerTilesParent: {fileID: 1627825882}
+  tileSettings:
+  - tileType: Empty
+    sprite: {fileID: 0}
+    tileColor: {r: 1, g: 1, b: 1, a: 1}
+  - tileType: Start
+    sprite: {fileID: 21300000, guid: 0c0b607dae197f34b88eebe994a559a1, type: 3}
+    tileColor: {r: 0.5921569, g: 0.9803922, b: 0.4666667, a: 1}
+  - tileType: Apple
+    sprite: {fileID: 21300000, guid: 3b6a93024538a454ea37f305368c1609, type: 3}
+    tileColor: {r: 0.4666667, g: 0.82745105, b: 0.9803922, a: 1}
+  - tileType: Pear
+    sprite: {fileID: 21300000, guid: 75e5056cea16d3f478ae102410571118, type: 3}
+    tileColor: {r: 0.78823537, g: 0.4666667, b: 0.9803922, a: 1}
+  - tileType: Strawberry
+    sprite: {fileID: 21300000, guid: 7ed6aafefafe8cf4b9e47bbe00f09924, type: 3}
+    tileColor: {r: 0.9686275, g: 0.60784316, b: 0.36078432, a: 1}
   tileColors:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.59140146, g: 0.98039216, b: 0.4666666, a: 1}

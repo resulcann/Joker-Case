@@ -1,26 +1,26 @@
 ﻿using UnityEngine;
 
-public class OuterTile : MonoBehaviour
+public class OuterTile : MonoBehaviour, ITile
 {
-    private string _type;
+    private string _tileType;
 
-    public string Type
+    public string TileType
     {
-        get => _type;
+        get => _tileType;
         set
         {
-            _type = value;
+            _tileType = value;
             UpdateVisual();
         }
     }
 
-    private void UpdateVisual()
+    public void UpdateVisual()
     {
-        var buildingPrefab = Resources.Load<GameObject>($"Prefabs/Buildings/{Type}");
+        var buildingPrefab = Resources.Load<GameObject>($"Prefabs/Buildings/{TileType}");
         if (buildingPrefab != null)
         {
             var building = Instantiate(buildingPrefab, transform);
-            building.name = $"{Type}_Instance";
+            building.name = $"{TileType}_Instance";
 
             SetRotation(building);
         }

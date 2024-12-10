@@ -22,7 +22,7 @@ public class Player : GenericSingleton<Player>
     
     public void Init()
     {
-        var tiles = TileController.Instance.GetInnerTiles();
+        var tiles = TileController.Instance.InnerTiles;
         if (tiles != null && tiles.Count > 0)
         {
             var startTile = tiles[0].transform; // Tile 0
@@ -68,7 +68,7 @@ public class Player : GenericSingleton<Player>
     
     private IEnumerator MoveThroughSteps()
     {
-        var tiles = TileController.Instance.GetInnerTiles();
+        var tiles = TileController.Instance.InnerTiles;
         _isMoving = true;
         
         // Plays running animation
@@ -120,7 +120,7 @@ public class Player : GenericSingleton<Player>
     /// </summary>
     private void LookAtNextTile()
     {
-        var tiles = TileController.Instance.GetInnerTiles();
+        var tiles = TileController.Instance.InnerTiles;
 
         if (tiles != null && tiles.Count > 0)
         {
@@ -142,9 +142,8 @@ public class Player : GenericSingleton<Player>
             InventoryManager.Instance.AddFruit(tile.TileType, tile.Amount);
 
             // Show fruit animation
-            var tileSprite = TileController.Instance.GetTileSprite(tile.TileType);
             var popupPosition = tile.transform.position + Vector3.up * 2f;
-            FruitAnimationManager.Instance.ShowAnimation($"+{tile.Amount}", tileSprite, popupPosition);
+            FruitAnimationManager.Instance.ShowAnimation($"+{tile.Amount}", tile.TileSprite, popupPosition);
         }
     }
 

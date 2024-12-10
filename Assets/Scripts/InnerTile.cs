@@ -1,8 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.WSA;
 
-public class InnerTile : MonoBehaviour
+public class InnerTile : MonoBehaviour, ITile
 {
     [SerializeField] private Renderer _tileRenderer;
     [SerializeField] private SpriteRenderer _spriteRenderer;
@@ -14,6 +13,8 @@ public class InnerTile : MonoBehaviour
 
     public int Amount { get; set; } = 0;
     public string TileType { get; set; } = "";
+    public Sprite TileSprite => TileController.Instance.TileSettings[TileType].sprite;
+    public Color TileColor => TileController.Instance.TileSettings[TileType].color;
 
     #endregion
     
@@ -27,36 +28,16 @@ public class InnerTile : MonoBehaviour
     {
         TileType = type;
         Amount = int.TryParse(amount, out var result) ? result : 0;
-
         UpdateVisual();
     }
     
-    private void UpdateVisual()
+    public void UpdateVisual()
     {
-        var color = TileController.Instance.GetTileColorByType(TileType);
-
         _tileRenderer.GetPropertyBlock(_propertyBlock);
-        _propertyBlock.SetColor("_Color", color);
+        _propertyBlock.SetColor("_Color", TileColor);
         _tileRenderer.SetPropertyBlock(_propertyBlock);
-
-        // Sprite ataması
-        var spriteName = TileType switch
-        {
-            "Start" => "StartSprite",
-            "Apple" => "AppleSprite",
-            "Pear" => "PearSprite",
-            "Strawberry" => "StrawberrySprite",
-            _ => null
-        };
-
-        if (TileType == "Start")
-        {
-            var srTransform = _spriteRenderer.transform;
-            srTransform.localPosition = new Vector3(srTransform.localPosition.x, 0.0101f, 0);
-            srTransform.localScale = Vector3.one * 0.0025f;
-        }
-
-        _spriteRenderer.sprite = spriteName != null ? Resources.Load<Sprite>($"Sprites/{spriteName}") : null;
+        
+        _spriteRenderer.sprite = TileSprite;
         UpdateAmountText();
     }
 
